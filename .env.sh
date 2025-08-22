@@ -1,7 +1,0 @@
-MODO_TESTE=true
-
-SUPABASE_URL_TEST=https://sdqkqzpeoubwesgepveu.supabase.co
-SUPABASE_KEY_TEST=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkcWtxenBlb3Vid2VzZ2VwdmV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4Mjg2OTUsImV4cCI6MjA3MTQwNDY5NX0.2_SuJWP8EGQR6gTTVujqyRHVy1lqY7fDNHD0WRvsQg0
-
-SUPABASE_URL_PROD=https://sua-url-prod.supabase.co
-SUPABASE_KEY_PROD=chave-anon-producao
