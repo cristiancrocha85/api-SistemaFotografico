@@ -11,9 +11,9 @@ app.use(express.json());
 const supabase = require('./supabase');
 
 // Rotas de exemplo (substitua pelas suas reais)
-/*app.get('/api/status', async (req, res) => {
+app.get('/api/status', async (req, res) => {
   res.json({ status: 'API online', modo: process.env.MODO_TESTE });
-});*/
+});
 
 // Porta
 const port = process.env.PORT || 4000;
