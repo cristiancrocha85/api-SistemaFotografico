@@ -1,8 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-//const dotenv = require('dotenv');
-
-dotenv.config(); // carrega env correto automaticamente
 
 const app = express();
 app.use(cors());
