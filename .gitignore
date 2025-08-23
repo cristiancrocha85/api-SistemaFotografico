@@ -3,6 +3,9 @@ node_modules/
 
 # Arquivos de ambiente
 .env
+envTeste/
+envOficial/
+
 
 # Logs
 npm-debug.log*
