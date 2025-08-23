@@ -12,7 +12,7 @@ const supabase = require('./supabase');
 const plataformaRouter = require('./routes/plataforma');
 
 //Usar Rotas
-app.use('/plataforma',plataformaRouter);
+app.use('/api/plataforma',plataformaRouter);
 
 // Rotas de exemplo (substitua pelas suas reais)
 app.get('/api/status', async (req, res) => {
