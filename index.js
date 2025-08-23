@@ -9,9 +9,13 @@ app.use(express.json());
 
 // Importar supabase
 const supabase = require('./supabase');
+const plataformaRouter = require('./routes/plataforma');
+
+//Usar Rotas
+app.use('/plataforma',plataformaRouter);
 
 // Rotas de exemplo (substitua pelas suas reais)
-app.get('/status', async (req, res) => {
+app.get('/api/status', async (req, res) => {
   res.json({ status: 'API online', modo: process.env.MODO_TESTE });
 });
 
