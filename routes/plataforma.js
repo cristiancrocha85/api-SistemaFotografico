@@ -1,3 +1,7 @@
+const express = require('express');
+const router = express.Router();
+const supabase = require('../supabase');
+
 router.get('/', async (req, res) => {
   const MODO_TESTE = process.env.MODO_TESTE === 'true';
   const tabela = 'tb_PlataformaVenda';
