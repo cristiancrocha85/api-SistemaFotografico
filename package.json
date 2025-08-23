@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "start:test": "env-cmd -f ./envTeste/.env node index.js",
-    "start:prod": "env-cmd -f ./envOficial/.env node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:prod": "env-cmd -f ./envOficial/.env node index.js"
   },
   "repository": {
     "type": "git",
