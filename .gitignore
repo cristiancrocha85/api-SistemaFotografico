@@ -2,20 +2,5 @@
 node_modules/
 
 # Arquivos de ambiente
-.env
 envTeste/
 envOficial/
-
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Pastas de build (se houver)
-dist/
-build/
-
-# Sistema
-.DS_Store
-Thumbs.db
