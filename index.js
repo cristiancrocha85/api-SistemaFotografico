@@ -26,5 +26,5 @@ const port = process.env.PORT || 4000;
 const ambiente = process.env.MODO_TESTE === 'true' ? 'Ambiente de Testes' : 'Ambiente Oficial';
 
 app.listen(port, () => {
-  console.log(`API rodando na porta ${port} | Ambiente: ${ambiente}`);
+  console.log(`API rodando na porta ${port} | Qual ambiente esta rodando: ${ambiente}`);
 });
