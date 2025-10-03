@@ -30,5 +30,32 @@ router.get('/', async (req, res) => {
     });
   }
 });
+//=============================================
+// Inserir Plataformas
+//=============================================
+router.post('/', async (req, res) => {
+  const { plat_Plataforma } = req.body;
+
+  /*if (!Inst_Financeira || Inst_Financeira.trim() === '') {
+    return res.status(400).json({ error: 'O nome da instituição financeira é obrigatório.' });
+  }*/
+
+  try {
+    const { data, error } = await supabase
+      .from('tb_Plataforma')
+      .insert([{ plat_Plataforma}])
+      .select();
+
+    if (error) {
+      console.error("Erro a plataforma:", error.message);
+      return res.status(500).json({ error: 'Erro ao inserir plataforma', details: error.message });
+    }
+
+    res.status(201).json(data[0]);
+  } catch (err) {
+    console.error("Erro inesperado ao inserir a plataforma:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao inserir a plataforma', details: err.message });
+  }
+});
 
 module.exports = router;
