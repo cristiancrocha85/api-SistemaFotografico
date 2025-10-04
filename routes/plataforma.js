@@ -58,5 +58,38 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Erro inesperado ao inserir a plataforma', details: err.message });
   }
 });
+//=============================================
+// Editar Plataformas
+//=============================================
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { plat_Plataforma } = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from('tb_Plataforma')
+      .update({ plat_Plataforma })
+      .eq('plat_Id', id)
+      .select();
+
+    if (error) {
+      if (error.code === '23505' || error.message.includes("duplicate key value")) {
+        return res.status(400).json({ error: "Plataforma já cadastrada" });
+      }
+
+      console.error("Erro ao editar a plataforma:", error.message);
+      return res.status(500).json({ error: 'Erro ao editar a plataforma', details: error.message });
+    }
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: 'Plataforma não encontrada' });
+    }
+
+    res.status(200).json(data[0]);
+  } catch (err) {
+    console.error("Erro inesperado ao editar a plataforma:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao editar a plataforma', details: err.message });
+  }
+});
 
 module.exports = router;
