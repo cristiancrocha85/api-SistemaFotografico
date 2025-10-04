@@ -18,7 +18,7 @@ app.use('/api/plataforma', plataformaRouter);
 // Status da API
 app.get('/api/status', (req, res) => {
   const ambiente = process.env.MODO_TESTE === 'true' ? 'Ambiente de Testes' : 'Ambiente Oficial';
-  res.json({ status: 'API online', ambiente });
+  res.json({ status: 'API online', yy });
 });
 
 // Porta
