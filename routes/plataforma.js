@@ -69,7 +69,7 @@ router.put('/:id', async (req, res) => {
     const { data, error } = await supabase
       .from('tb_Plataforma')
       .update({ plat_Plataforma })
-      .eq('plat_Id', id)
+      .eq('Id', id)
       .select();
 
     if (error) {
