@@ -91,5 +91,30 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro inesperado ao editar a plataforma', details: err.message });
   }
 });
+//=============================================
+// Excluir Plataforma
+//=============================================
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { error } = await supabase
+      .from('tb_Plataforma')
+      .delete()
+      .eq('Id', id);
+
+    if (error) {
+      console.error("Erro ao excluir a plataforma:", error.message);
+      return res.status(500).json({ error: 'Erro ao excluir a plataforma', details: error.message });
+    }
+
+    // Retorna só o status e uma mensagem genérica
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Erro inesperado ao excluir a plataforma:", err.message);
+    return res.status(500).json({ error: 'Erro inesperado ao excluir a plataforma', details: err.message });
+  }
+});
+
 
 module.exports = router;
