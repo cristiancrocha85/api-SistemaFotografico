@@ -11,9 +11,11 @@ app.use(express.json());
 
 // Importar Rotas
 const plataformaRouter = require('./routes/plataforma');
+const trabalhosRouter = require('./routes/trabalhos');
 
 // Usar Rotas
 app.use('/api/plataforma', plataformaRouter);
+app.use('/api/trabalhos',trabalhosRouter);
 
 // Status da API
 app.get('/api/status', (req, res) => {
