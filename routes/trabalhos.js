@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('tb_Trabalhos')
-      .select('Id, ptrab_Trabalhos')
+      .select('Id, trab_Trabalhos')
       .order('Id', { ascending: true });
 
     if (error) {
