@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
       ag_Observacao: agenda.ag_Observacao,
       ag_Mes: agenda.ag_Mes,
       ag_Ano: agenda.ag_Ano,
-      Trabalhos:agenda.tb_Trabalhos?.trab_Trabalhos || null,
+      Trabalho:agenda.tb_Trabalhos?.trab_Trabalhos || null,
       Plataforma:agenda.tb_Plataforma?.plat_Plataforma || null,
     }));
 
