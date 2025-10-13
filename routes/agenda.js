@@ -67,7 +67,8 @@ router.post('/', async (req, res) => {
     const { data, error } = await supabase
       .from('tb_Agenda')
       .insert([{
-        ag_TipoTrabalho
+        ag_TipoTrabalho,
+        ag_Data: new Date() // coloca hoje por exemplo
       }])
       .select()
       .single(); // retorna um objeto
