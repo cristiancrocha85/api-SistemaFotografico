@@ -55,33 +55,41 @@ router.get('/', async (req, res) => {
   }
 });
 // ===================================
-// POST - Inserir Agenda
+// POST - Inserir Agenda (com horário)
 // ===================================
 router.post('/', async (req, res) => {
   try {
     const {
       ag_TipoTrabalho,
-      ag_Data
+      ag_Data,
+      ag_Horario
     } = req.body;
 
-    // Apenas valida o que é obrigatório por enquanto
+    // Valida apenas o que é realmente obrigatório
     if (!ag_TipoTrabalho || isNaN(Number(ag_TipoTrabalho)) || Number(ag_TipoTrabalho) <= 0) {
       return res.status(400).json({ error: 'ag_TipoTrabalho é obrigatório e deve ser um ID válido.' });
     }
 
-    // Insere no Supabase, aceitando nulos
+    // Define data padrão se não vier nada
+    const dataEvento = ag_Data ? new Date(ag_Data) : new Date();
+    const dataStr = dataEvento.toISOString().split('T')[0]; // YYYY-MM-DD
+
+    // Horário — mantém formato simples, se não vier, deixa nulo
+    const horarioStr = ag_Horario && ag_Horario.trim() !== '' ? ag_Horario : null;
+
+    // Inserção mínima no Supabase
     const { data, error } = await supabase
       .from('tb_Agenda')
       .insert([{
         ag_TipoTrabalho: Number(ag_TipoTrabalho),
-        ag_Data: ag_Data ? new Date(ag_Data) : new Date()
-        // os outros campos podem ficar nulos
+        ag_Data: dataStr,
+        ag_Horario: horarioStr
       }])
       .select()
-      .single(); // retorna um objeto
+      .single(); // retorna apenas um objeto
 
     if (error) {
-      console.error("Erro ao inserir a agenda:", error.message || error);
+      console.error("Erro ao inserir a agenda:", error);
       return res.status(500).json({ error: 'Erro ao inserir a agenda', details: error });
     }
 
@@ -92,7 +100,6 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Erro inesperado ao inserir a agenda', details: err.message });
   }
 });
-
 //=============================================
 // Editar Agenda
 //=============================================
