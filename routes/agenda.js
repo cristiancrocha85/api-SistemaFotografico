@@ -60,7 +60,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const {
-      ag_TipoTrabalho
+      ag_TipoTrabalho,
+      ag_Data
     } = req.body;
 
     // Insere no Supabase, aceitando nulos
