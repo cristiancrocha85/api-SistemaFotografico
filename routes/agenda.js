@@ -59,26 +59,34 @@ router.get('/', async (req, res) => {
 // ===================================
 router.post('/', async (req, res) => {
   try {
-    const { ag_TipoTrabalho, ag_Data } = req.body;
+    let { ag_TipoTrabalho, ag_Data } = req.body;
 
-    // Verifica se ag_TipoTrabalho existe e é número válido
-    if (!ag_TipoTrabalho || isNaN(Number(ag_TipoTrabalho)) || Number(ag_TipoTrabalho) <= 0) {
-    return res.status(400).json({ error: "ag_TipoTrabalho é obrigatório e deve ser um ID válido" });
+    // Garante que ag_TipoTrabalho seja número válido
+    ag_TipoTrabalho = Number(ag_TipoTrabalho);
+    if (!ag_TipoTrabalho || isNaN(ag_TipoTrabalho) || ag_TipoTrabalho <= 0) {
+      return res.status(400).json({ error: "ag_TipoTrabalho é obrigatório e deve ser um ID válido" });
     }
 
-
-    // Define a data caso não seja enviada
-    const dataEvento = ag_Data ? new Date(ag_Data) : new Date();
+    // Define a data, se não veio usa hoje
+    let dataEvento;
+    if (ag_Data) {
+      dataEvento = new Date(ag_Data);
+      if (isNaN(dataEvento.getTime())) { // verifica data inválida
+        return res.status(400).json({ error: "ag_Data inválida" });
+      }
+    } else {
+      dataEvento = new Date();
+    }
 
     // Insere no Supabase
     const { data, error } = await supabase
       .from('tb_Agenda')
       .insert([{
-        ag_TipoTrabalho: Number(ag_TipoTrabalho),
-        ag_Data: dataEvento
+        ag_TipoTrabalho: ag_TipoTrabalho,
+        ag_Data: dataEvento.toISOString().split('T')[0] // envia só a data em formato 'YYYY-MM-DD'
       }])
       .select()
-      .single(); // retorna um único objeto
+      .single();
 
     if (error) {
       console.error("Erro ao inserir a agenda:", error);
