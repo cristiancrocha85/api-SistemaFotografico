@@ -62,9 +62,10 @@ router.post('/', async (req, res) => {
     const { ag_TipoTrabalho, ag_Data } = req.body;
 
     // Verifica se ag_TipoTrabalho existe e é número válido
-    if (ag_TipoTrabalho === undefined || ag_TipoTrabalho === null || isNaN(Number(ag_TipoTrabalho)) || Number(ag_TipoTrabalho) <= 0) {
-      return res.status(400).json({ error: "ag_TipoTrabalho é obrigatório e deve ser um ID válido" });
+    if (!ag_TipoTrabalho || isNaN(Number(ag_TipoTrabalho)) || Number(ag_TipoTrabalho) <= 0) {
+    return res.status(400).json({ error: "ag_TipoTrabalho é obrigatório e deve ser um ID válido" });
     }
+
 
     // Define a data caso não seja enviada
     const dataEvento = ag_Data ? new Date(ag_Data) : new Date();
