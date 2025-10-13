@@ -99,7 +99,45 @@ router.post('/', async (req, res) => {
     console.error("Erro inesperado ao inserir a agenda:", err.message);
     res.status(500).json({ error: 'Erro inesperado ao inserir a agenda', details: err.message });
   }
+});// ===================================
+// POST - Inserir Agenda (por partes)
+// ===================================
+router.post('/', async (req, res) => {
+  try {
+    const {
+      ag_TipoTrabalho,
+      ag_Data
+    } = req.body;
+
+    // Apenas valida o que é obrigatório por enquanto
+    if (!ag_TipoTrabalho || isNaN(Number(ag_TipoTrabalho)) || Number(ag_TipoTrabalho) <= 0) {
+      return res.status(400).json({ error: 'ag_TipoTrabalho é obrigatório e deve ser um ID válido.' });
+    }
+
+    // Insere no Supabase, aceitando nulos
+    const { data, error } = await supabase
+      .from('tb_Agenda')
+      .insert([{
+        ag_TipoTrabalho: Number(ag_TipoTrabalho),
+        ag_Data: ag_Data ? new Date(ag_Data) : new Date()
+        // os outros campos podem ficar nulos
+      }])
+      .select()
+      .single(); // retorna um objeto
+
+    if (error) {
+      console.error("Erro ao inserir a agenda:", error.message || error);
+      return res.status(500).json({ error: 'Erro ao inserir a agenda', details: error });
+    }
+
+    res.status(201).json(data);
+
+  } catch (err) {
+    console.error("Erro inesperado ao inserir a agenda:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao inserir a agenda', details: err.message });
+  }
 });
+
 //=============================================
 // Editar Agenda
 //=============================================
