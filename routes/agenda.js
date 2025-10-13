@@ -73,8 +73,8 @@ router.post('/', async (req, res) => {
       .single(); // retorna um objeto
 
     if (error) {
-      console.error("Erro ao inserir a agenda:", error.message);
-      return res.status(500).json({ error: 'Erro ao inserir a agenda', details: error.message });
+      console.error("Erro ao inserir a agenda:", error);
+      return res.status(500).json({ error: 'Erro ao inserir a agenda', details: error });
     }
 
     res.status(201).json(data);
