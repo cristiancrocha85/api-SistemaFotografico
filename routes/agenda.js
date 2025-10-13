@@ -59,20 +59,22 @@ router.get('/', async (req, res) => {
 //=============================================
 router.post('/', async (req, res) => {
   try {
-    const {
-      ag_TipoTrabalho,
-      ag_Data
-    } = req.body;
+    const { ag_TipoTrabalho } = req.body;
 
-    // Insere no Supabase, aceitando nulos
+    if (!ag_TipoTrabalho) {
+      return res.status(400).json({ error: "ag_TipoTrabalho é obrigatório" });
+    }
+
+    const hoje = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+
     const { data, error } = await supabase
       .from('tb_Agenda')
       .insert([{
         ag_TipoTrabalho,
-        ag_Data: new Date() // coloca hoje por exemplo
+        ag_Data: hoje
       }])
       .select()
-      .single(); // retorna um objeto
+      .single();
 
     if (error) {
       console.error("Erro ao inserir a agenda:", error);
