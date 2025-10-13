@@ -60,34 +60,14 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const {
-      ag_TipoTrabalho,
-      ag_Data,
-      ag_Horario,
-      ag_Evento,
-      ag_Plataforma,
-      ag_Local,
-      ag_DiasFaltantes,
-      ag_Status,
-      ag_Observacao,
-      ag_Mes,
-      ag_Ano
+      ag_TipoTrabalho
     } = req.body;
 
     // Insere no Supabase, aceitando nulos
     const { data, error } = await supabase
       .from('tb_Agenda')
       .insert([{
-        ag_TipoTrabalho,
-        ag_Data: ag_Data || null,
-        ag_Horario: ag_Horario || null,
-        ag_Evento: ag_Evento || null,
-        ag_Plataforma,
-        ag_Local: ag_Local || null,
-        ag_DiasFaltantes: ag_DiasFaltantes ?? null,
-        ag_Status: ag_Status || null,
-        ag_Observacao: ag_Observacao || null,
-        ag_Mes: ag_Mes || null,
-        ag_Ano: ag_Ano ?? null
+        ag_TipoTrabalho
       }])
       .select()
       .single(); // retorna um objeto
