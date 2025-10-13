@@ -59,51 +59,6 @@ router.get('/', async (req, res) => {
 // ===================================
 router.post('/', async (req, res) => {
   try {
-    let { ag_TipoTrabalho, ag_Data } = req.body;
-
-    // Garante que ag_TipoTrabalho seja número válido
-    ag_TipoTrabalho = Number(ag_TipoTrabalho);
-    if (!ag_TipoTrabalho || isNaN(ag_TipoTrabalho) || ag_TipoTrabalho <= 0) {
-      return res.status(400).json({ error: "ag_TipoTrabalho é obrigatório e deve ser um ID válido" });
-    }
-
-    // Define a data, se não veio usa hoje
-    let dataEvento;
-    if (ag_Data) {
-      dataEvento = new Date(ag_Data);
-      if (isNaN(dataEvento.getTime())) { // verifica data inválida
-        return res.status(400).json({ error: "ag_Data inválida" });
-      }
-    } else {
-      dataEvento = new Date();
-    }
-
-    // Insere no Supabase
-    const { data, error } = await supabase
-      .from('tb_Agenda')
-      .insert([{
-        ag_TipoTrabalho: ag_TipoTrabalho,
-        ag_Data: dataEvento.toISOString().split('T')[0] // envia só a data em formato 'YYYY-MM-DD'
-      }])
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Erro ao inserir a agenda:", error);
-      return res.status(500).json({ error: 'Erro ao inserir a agenda', details: error });
-    }
-
-    res.status(201).json(data);
-
-  } catch (err) {
-    console.error("Erro inesperado ao inserir a agenda:", err.message);
-    res.status(500).json({ error: 'Erro inesperado ao inserir a agenda', details: err.message });
-  }
-});// ===================================
-// POST - Inserir Agenda (por partes)
-// ===================================
-router.post('/', async (req, res) => {
-  try {
     const {
       ag_TipoTrabalho,
       ag_Data
