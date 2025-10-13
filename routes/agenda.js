@@ -57,7 +57,53 @@ router.get('/', async (req, res) => {
 //=============================================
 // Inserir Agenda
 //=============================================
+router.post('/', async (req, res) => {
+  try {
+    const {
+      ag_TipoTrabalho,
+      ag_Data,
+      ag_Horario,
+      ag_Evento,
+      ag_Plataforma,
+      ag_Local,
+      ag_DiasFaltantes,
+      ag_Status,
+      ag_Observacao,
+      ag_Mes,
+      ag_Ano
+    } = req.body;
 
+    // Insere no Supabase, aceitando nulos
+    const { data, error } = await supabase
+      .from('tb_Agenda')
+      .insert([{
+        ag_TipoTrabalho,
+        ag_Data: ag_Data || null,
+        ag_Horario: ag_Horario || null,
+        ag_Evento: ag_Evento || null,
+        ag_Plataforma,
+        ag_Local: ag_Local || null,
+        ag_DiasFaltantes: ag_DiasFaltantes ?? null,
+        ag_Status: ag_Status || null,
+        ag_Observacao: ag_Observacao || null,
+        ag_Mes: ag_Mes || null,
+        ag_Ano: ag_Ano ?? null
+      }])
+      .select()
+      .single(); // retorna um objeto
+
+    if (error) {
+      console.error("Erro ao inserir a agenda:", error.message);
+      return res.status(500).json({ error: 'Erro ao inserir a agenda', details: error.message });
+    }
+
+    res.status(201).json(data);
+
+  } catch (err) {
+    console.error("Erro inesperado ao inserir a agenda:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao inserir a agenda', details: err.message });
+  }
+});
 //=============================================
 // Editar Agenda
 //=============================================
