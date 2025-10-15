@@ -62,7 +62,15 @@ router.post('/', async (req, res) => {
     const {
       ag_TipoTrabalho,
       ag_Data,
-      ag_Horario
+      ag_Horario,
+      ag_Evento,
+      ag_Plataforma,
+      ag_Local,
+      ag_DiasFaltantes,
+      ag_Status,
+      ag_Observacao,
+      ag_Mes,
+      ag_Ano,
     } = req.body;
 
     // Valida apenas o que é realmente obrigatório
@@ -83,7 +91,15 @@ router.post('/', async (req, res) => {
       .insert([{
         ag_TipoTrabalho: Number(ag_TipoTrabalho),
         ag_Data: dataStr,
-        ag_Horario: horarioStr
+        ag_Horario: horarioStr,
+        ag_Evento: ag_Evento,
+        ag_Plataforma: ag_Plataforma ? Number(ag_Plataforma) : null,
+        ag_Local: ag_Local,
+        ag_DiasFaltantes: ag_DiasFaltantes ? Number(ag_DiasFaltantes) : null,
+        ag_Status: ag_Status,
+        ag_Observacao: ag_Observacao,
+        ag_Mes: ag_Mes,
+        ag_Ano: ag_Ano
       }])
       .select()
       .single(); // retorna apenas um objeto
