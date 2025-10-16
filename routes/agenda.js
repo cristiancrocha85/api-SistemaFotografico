@@ -123,5 +123,27 @@ router.post('/', async (req, res) => {
 //=============================================
 // Excluir Agenda
 //=============================================
+// ================================
+// PUT - Atualizar eventos (dias faltantes / status)
+// ================================
+router.put('/atualizar_eventos', async (req, res) => {
+  try {
+    const hojeSP = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const [dia, mes, ano] = hojeSP.split('/');
+    const isoHojeSP = `${ano}-${mes}-${dia}`;
+
+    const { data, error } = await supabase.rpc('atualizar_eventos', { hoje_param: isoHojeSP });
+
+    if (error) {
+      console.error('Erro Supabase:', error);
+      return res.status(500).json({ success: false, error: error.message || error });
+    }
+
+    res.json({ success: true, message: 'Eventos atualizados com sucesso!', data });
+  } catch (err) {
+    console.error('Erro geral:', err);
+    res.status(500).json({ success: false, error: 'Erro interno no servidor' });
+  }
+});
 
 module.exports = router;
