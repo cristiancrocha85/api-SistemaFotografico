@@ -119,13 +119,65 @@ router.post('/', async (req, res) => {
 //=============================================
 // Editar Agenda
 //=============================================
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      ag_TipoTrabalho,
+      ag_Data,
+      ag_Horario,
+      ag_Evento,
+      ag_Plataforma,
+      ag_Local,
+      ag_DiasFaltantes,
+      ag_Status,
+      ag_Observacao,
+      ag_Mes,
+      ag_Ano
+    } = req.body;
 
+    if (!id) return res.status(400).json({ error: 'ID é obrigatório.' });
+
+    const dataEvento = ag_Data ? new Date(ag_Data) : new Date();
+    const dataStr = dataEvento.toISOString().split('T')[0];
+    const horarioStr = ag_Horario?.trim() || null;
+
+    const { data, error } = await supabase
+      .from('tb_Agenda')
+      .update({
+        ag_TipoTrabalho: Number(ag_TipoTrabalho),
+        ag_Data: dataStr,
+        ag_Horario: horarioStr,
+        ag_Evento,
+        ag_Plataforma: Number(ag_Plataforma),
+        ag_Local,
+        ag_DiasFaltantes: Number(ag_DiasFaltantes),
+        ag_Status,
+        ag_Observacao,
+        ag_Mes,
+        ag_Ano
+      })
+      .eq('Id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Erro ao atualizar agenda:', error);
+      return res.status(500).json({ error: 'Erro ao atualizar agenda', details: error });
+    }
+
+    res.status(200).json({ success: true, data });
+  } catch (err) {
+    console.error('Erro geral:', err.message);
+    res.status(500).json({ error: 'Erro interno no servidor', details: err.message });
+  }
+});
 //=============================================
 // Excluir Agenda
 //=============================================
-// ================================
+// ============================================
 // PUT - Atualizar eventos (dias faltantes / status)
-// ================================
+// ============================================
 router.put('/atualizar_eventos', async (req, res) => {
   try {
     const hojeSP = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
