@@ -197,6 +197,28 @@ router.put('/:id', async (req, res) => {
 //=============================================
 // Excluir Agenda
 //=============================================
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ error: 'ID inválido.' });
+    }
 
+    const { error } = await supabase
+      .from('tb_Agenda')
+      .delete()
+      .eq('Id', id);
+
+    if (error) {
+      console.error("Erro ao excluir o evento da agenda:", error.message);
+      return res.status(500).json({ error: 'Erro ao excluir o evento da agenda', details: error.message });
+    }
+
+    res.status(200).json({ message: 'Evento excluído com sucesso!' });
+  } catch (err) {
+    console.error("Erro inesperado ao excluir evento:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao excluir evento', details: err.message });
+  }
+});
 module.exports = router;
