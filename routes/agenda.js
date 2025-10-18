@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
         ag_Observacao,
         ag_Mes,
         ag_Ano,
-        tb_Trabalhos ( trab_Trabalhos ),
+        tb_TipoEventos ( eve_TipoEvento ),
         tb_Plataforma ( plat_Plataforma )
       `)
       .order('ag_Data', { ascending: false })
@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
       ag_Observacao: agenda.ag_Observacao,
       ag_Mes: agenda.ag_Mes,
       ag_Ano: agenda.ag_Ano,
-      Trabalho:agenda.tb_Trabalhos?.trab_Trabalhos || null,
+      Evento:agenda.tb_TipoEventos?.eve_TipoEvento || null,
       Plataforma:agenda.tb_Plataforma?.plat_Plataforma || null,
     }));
 
@@ -60,7 +60,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const {
-      ag_TipoTrabalho,
+      ag_TipoEvento,
       ag_Data,
       ag_Horario,
       ag_Evento,
@@ -74,8 +74,8 @@ router.post('/', async (req, res) => {
     } = req.body;
 
     // Valida apenas o que é realmente obrigatório
-    if (!ag_TipoTrabalho || isNaN(Number(ag_TipoTrabalho)) || Number(ag_TipoTrabalho) <= 0) {
-      return res.status(400).json({ error: 'ag_TipoTrabalho é obrigatório e deve ser um ID válido.' });
+    if (!ag_TipoEvento || isNaN(Number(ag_TipoEvento)) || Number(ag_TipoEvento) <= 0) {
+      return res.status(400).json({ error: 'ag_TipoEvento é obrigatório e deve ser um ID válido.' });
     }
 
     // Define data padrão se não vier nada
@@ -89,7 +89,7 @@ router.post('/', async (req, res) => {
     const { data, error } = await supabase
       .from('tb_Agenda')
       .insert([{
-        ag_TipoTrabalho: Number(ag_TipoTrabalho),
+        ag_TipoEvento: Number(ag_TipoEvento),
         ag_Data: dataStr,
         ag_Horario: horarioStr,
         ag_Evento: ag_Evento,
@@ -145,7 +145,7 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      ag_TipoTrabalho,
+      ag_TipoEvento,
       ag_Data,
       ag_Horario,
       ag_Evento,
@@ -167,7 +167,7 @@ router.put('/:id', async (req, res) => {
     const { data, error } = await supabase
       .from('tb_Agenda')
       .update({
-        ag_TipoTrabalho: Number(ag_TipoTrabalho),
+        ag_TipoEvento: Number(ag_TipoEvento),
         ag_Data: dataStr,
         ag_Horario: horarioStr,
         ag_Evento,
