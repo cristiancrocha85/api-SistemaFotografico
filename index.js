@@ -11,12 +11,12 @@ app.use(express.json());
 
 // Importar Rotas
 const plataformaRouter = require('./routes/plataforma');
-const trabalhosRouter = require('./routes/trabalhos');
+const eventosRouter = require('./routes/eventos');
 const agendaRouter = require('./routes/agenda');
 
 // Usar Rotas
 app.use('/api/plataforma', plataformaRouter);
-app.use('/api/trabalhos',trabalhosRouter);
+app.use('/api/eventos',eventosRouter);
 app.use('/api/agenda',agendaRouter);
 
 // Status da API
