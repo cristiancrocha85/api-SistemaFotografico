@@ -13,11 +13,13 @@ app.use(express.json());
 const plataformaRouter = require('./routes/plataforma');
 const eventosRouter = require('./routes/eventos');
 const agendaRouter = require('./routes/agenda');
+const entradaRouter = require('./routes/entrada');
 
 // Usar Rotas
 app.use('/api/plataforma', plataformaRouter);
 app.use('/api/eventos',eventosRouter);
 app.use('/api/agenda',agendaRouter);
+app.use('/api/entrada',entradaRouter);
 
 // Status da API
 app.get('/api/status', (req, res) => {
