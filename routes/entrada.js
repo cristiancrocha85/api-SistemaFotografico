@@ -21,6 +21,54 @@ router.get('/', async (req, res) => {
         ent_TipoPgto,
         ent_Status,
         ent_LiberarSaldo,
+        ent_Evento,
+        tb_Agenda (ag_Evento)
+      `)
+      .order('ent_DataEntrada', { ascending: false })
+      .order('Id', { ascending: false });
+
+    if (error) {
+      console.error("Erro ao buscar a entrada:", error.message);
+      return res.status(500).json({ error: 'Erro ao buscar a entrada', details: error.message });
+    }
+
+    const response = (data || []).map(entrada => ({
+      Id: entrada.Id,
+      ent_DataEntrada: entrada.ent_DataEntrada,
+      ent_TipoEvento: entrada.ent_TipoEvento,
+      ent_DataEvento: entrada.ent_DataEvento,
+      ent_Plataforma: entrada.ent_Plataforma,
+      ent_QtdFotosVendidas: entrada.ent_QtdFotosVendidas,
+      ent_ValorTotal: entrada.ent_ValorTotal,
+      ent_TipoPgto: entrada.ent_TipoPgto,
+      ent_Status: entrada.ent_Status,
+      ent_LiberarSaldo: entrada.ent_LiberarSaldo,
+      ent_Evento: entrada.ent_Evento, // ID bruto da FK
+      Evento: entrada.tb_Agenda?.ag_Evento || null, // Nome do evento relacionado
+    }));
+
+    res.json(response);
+  } catch (err) {
+    console.error("Erro inesperado ao buscar a entrada:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao buscar a entrada', details: err.message });
+  }
+});
+
+/*router.get('/', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('tb_Entrada')
+      .select(`
+        Id,
+        ent_DataEntrada,
+        ent_TipoEvento,
+        ent_DataEvento,
+        ent_Plataforma,
+        ent_QtdFotosVendidas,
+        ent_ValorTotal,
+        ent_TipoPgto,
+        ent_Status,
+        ent_LiberarSaldo,
         tb_Agenda (ag_Evento)
       `)
       .order('ent_DataEntrada', { ascending: false })
@@ -52,7 +100,7 @@ router.get('/', async (req, res) => {
     console.error("Erro inesperado ao buscar a entrada:", err.message);
     res.status(500).json({ error: 'Erro inesperado ao buscar a entrada', details: err.message });
   }
-});
+});*/
 // ===================================
 // POST - Inserir Entrada
 // ===================================
