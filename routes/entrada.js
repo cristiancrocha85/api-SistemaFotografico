@@ -74,6 +74,80 @@ router.post('/', async (req, res) => {
       ent_Ano
     } = req.body;
 
+    // Função utilitária para converter qualquer formato de data em YYYY-MM-DD
+    const formatarData = (valor) => {
+      if (!valor) return null;
+      const data = new Date(valor);
+      if (isNaN(data)) return null; // evita erro se vier formato inválido
+      return data.toISOString().split('T')[0];
+    };
+
+    // Prepara todas as datas formatadas
+    const dataEntrada = formatarData(ent_DataEntrada) || formatarData(new Date());
+    const dataEvento = formatarData(ent_DataEvento);
+    const dataPrevista = formatarData(ent_DataPrevista);
+
+    // Monta objeto final a ser inserido
+    const novaEntrada = {
+      ent_DataEntrada: dataEntrada,
+      ent_Evento: ent_Evento ? Number(ent_Evento) : null,
+      ent_TipoEvento,
+      ent_DataEvento: dataEvento,
+      ent_Plataforma,
+      ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
+      ent_ValorTotal: ent_ValorTotal ? Number(ent_ValorTotal) : 0,
+      ent_TipoPgto,
+      ent_Status,
+      ent_LiberarSaldo,
+      ent_DataPrevista: dataPrevista,
+      ent_Mes,
+      ent_Ano
+    };
+
+    // Insere no Supabase
+    const { data, error } = await supabase
+      .from('tb_Entrada')
+      .insert([novaEntrada])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Erro ao inserir a entrada:", error.message);
+      return res.status(500).json({
+        error: 'Erro ao inserir a entrada',
+        details: error.message
+      });
+    }
+
+    res.status(201).json(data);
+
+  } catch (err) {
+    console.error("Erro inesperado ao inserir a entrada:", err.message);
+    res.status(500).json({
+      error: 'Erro inesperado ao inserir a entrada',
+      details: err.message
+    });
+  }
+});
+
+/*router.post('/', async (req, res) => {
+  try {
+    const {
+      ent_DataEntrada,
+      ent_Evento,
+      ent_TipoEvento,
+      ent_DataEvento,
+      ent_Plataforma,
+      ent_QtdFotosVendidas,
+      ent_ValorTotal,
+      ent_TipoPgto,
+      ent_Status,
+      ent_LiberarSaldo,
+      ent_DataPrevista,
+      ent_Mes,
+      ent_Ano
+    } = req.body;
+
     // Define data padrão se não vier nada
     const dataEntrada = ent_DataEntrada? new Date(ent_DataEntrada) : new Date();
     const dataStr = dataEntrada.toISOString().split('T')[0]; // YYYY-MM-DD
@@ -85,7 +159,7 @@ router.post('/', async (req, res) => {
         ent_DataEntrada: dataStr,
         ent_Evento: Number(ent_Evento),
         ent_TipoEvento: ent_TipoEvento,
-        //ent_DataEvento: ent_DataEvento,
+        ent_DataEvento: ent_DataEvento,
         ent_Plataforma: ent_Plataforma,
         ent_QtdFotosVendidas: ent_QtdFotosVendidas,
         ent_ValorTotal,
@@ -110,7 +184,7 @@ router.post('/', async (req, res) => {
     console.error("Erro inesperado ao inserir a entrada:", err.message);
     res.status(500).json({ error: 'Erro inesperado ao inserir a entrada', details: err.message });
   }
-});
+});*/
 // ============================================
 // PUT - Atualizar entrada
 // ============================================
