@@ -95,7 +95,8 @@ router.post('/', async (req, res) => {
       ent_DataEvento: dataEvento,
       ent_Plataforma,
       ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
-      ent_ValorTotal: ent_ValorTotal ? Number(ent_ValorTotal) : 0,
+      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.'))
+        : 0,
       /*ent_TipoPgto,
       ent_Status,
       ent_LiberarSaldo,
