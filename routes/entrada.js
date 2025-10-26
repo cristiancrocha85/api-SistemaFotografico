@@ -85,7 +85,7 @@ router.post('/', async (req, res) => {
         ent_DataEntrada: dataStr,
         ent_Evento: Number(ent_Evento),
         ent_TipoEvento: ent_TipoEvento,
-        ent_DataEvento: ent_DataEvento,
+        //ent_DataEvento: ent_DataEvento,
         ent_Plataforma: ent_Plataforma,
         ent_QtdFotosVendidas: ent_QtdFotosVendidas,
         ent_ValorTotal,
