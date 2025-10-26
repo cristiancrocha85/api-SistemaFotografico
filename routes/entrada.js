@@ -84,7 +84,7 @@ router.post('/', async (req, res) => {
 
     // Prepara todas as datas formatadas
     const dataEntrada = formatarData(ent_DataEntrada) || formatarData(new Date());
-    const dataEvento = formatarData(ent_DataEvento);
+    //const dataEvento = formatarData(ent_DataEvento);
     //const dataPrevista = formatarData(ent_DataPrevista);
 
     // Monta objeto final a ser inserido
