@@ -21,6 +21,9 @@ router.get('/', async (req, res) => {
         ent_TipoPgto,
         ent_Status,
         ent_LiberarSaldo,
+        ent_DataPrevista,
+        ent_Mes,
+        ent_Ano,
         ent_Evento,
         tb_Agenda (ag_Evento)
       `)
@@ -43,6 +46,9 @@ router.get('/', async (req, res) => {
       ent_TipoPgto: entrada.ent_TipoPgto,
       ent_Status: entrada.ent_Status,
       ent_LiberarSaldo: entrada.ent_LiberarSaldo,
+      ent_DataPrevista: entrada.dataPrevista,
+      ent_Mes: entrada.ent_Mes,
+      ent_Ano: entrada.ent_Ano,
       ent_Evento: entrada.ent_Evento, // ID bruto da FK
       Evento: entrada.tb_Agenda?.ag_Evento || null, // Nome do evento relacionado
     }));
