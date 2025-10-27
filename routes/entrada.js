@@ -66,12 +66,12 @@ router.post('/', async (req, res) => {
       ent_Plataforma,
       ent_QtdFotosVendidas,
       ent_ValorTotal,
-      /*ent_TipoPgto,
+      ent_TipoPgto,
       ent_Status,
       ent_LiberarSaldo,
       ent_DataPrevista,
       ent_Mes,
-      ent_Ano*/
+      ent_Ano
     } = req.body;
 
     // Função utilitária para converter qualquer formato de data em YYYY-MM-DD
@@ -85,7 +85,7 @@ router.post('/', async (req, res) => {
     // Prepara todas as datas formatadas
     const dataEntrada = formatarData(ent_DataEntrada) || formatarData(new Date());
     const dataEvento = formatarData(ent_DataEvento);
-    //const dataPrevista = formatarData(ent_DataPrevista);
+    const dataPrevista = formatarData(ent_DataPrevista);
 
     // Monta objeto final a ser inserido
     const novaEntrada = {
@@ -95,14 +95,13 @@ router.post('/', async (req, res) => {
       ent_DataEvento: dataEvento,
       ent_Plataforma,
       ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
-      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.'))
-        : 0,
-      /*ent_TipoPgto,
+      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
+      ent_TipoPgto,
       ent_Status,
       ent_LiberarSaldo,
       ent_DataPrevista: dataPrevista,
       ent_Mes,
-      ent_Ano*/
+      ent_Ano
     };
 
     // Insere no Supabase
