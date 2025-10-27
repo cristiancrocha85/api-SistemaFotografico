@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
       ent_TipoPgto: entrada.ent_TipoPgto,
       ent_Status: entrada.ent_Status,
       ent_LiberarSaldo: entrada.ent_LiberarSaldo,
-      ent_DataPrevista: entrada.dataPrevista,
+      ent_DataPrevista: entrada.ent_DataPrevista,
       ent_Mes: entrada.ent_Mes,
       ent_Ano: entrada.ent_Ano,
       ent_Evento: entrada.ent_Evento, // ID bruto da FK
