@@ -187,7 +187,8 @@ router.put('/:id', async (req, res) => {
       })
       .eq('Id', id)
       .select()
-      .single();
+      .limit(1);
+
 
     if (error) {
       console.error('Erro ao atualizar entrada:', error);
@@ -200,7 +201,6 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro interno no servidor', details: err.message });
   }
 });
-
 
 /*router.put('/:id', async (req, res) => {
   try {
