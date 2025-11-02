@@ -143,9 +143,9 @@ router.post('/', async (req, res) => {
 //=============================================
 // Editar Entrada
 //=============================================
-router.put('/:Id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const { Id } = req.params;
+    const { id } = req.params;
     const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
 
     // validação simples
