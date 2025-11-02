@@ -148,6 +148,103 @@ router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
 
+    console.log('---- DEBUG ----');
+    console.log('ID recebido:', id);
+    console.log('Body recebido:', req.body);
+
+    const { data: antes } = await supabase
+      .from('tb_Entrada')
+      .select('*')
+      .eq('Id', Number(id));
+
+    console.log('Antes do update:', antes);
+
+    const { data, error, status } = await supabase
+      .from('tb_Entrada')
+      .update({
+        ent_QtdFotosVendidas: Number(ent_QtdFotosVendidas),
+        ent_ValorTotal: Number(ent_ValorTotal)
+      })
+      .eq('Id', Number(id))
+      .select();
+
+    console.log('Status:', status);
+    console.log('Data retornada:', data);
+    console.log('Erro:', error);
+
+    const { data: depois } = await supabase
+      .from('tb_Entrada')
+      .select('*')
+      .eq('Id', Number(id));
+
+    console.log('Depois do update:', depois);
+    console.log('----------------');
+
+    if (error) {
+      return res.status(500).json({ error: 'Erro ao atualizar entrada', details: error });
+    }
+
+    res.status(200).json({ success: true, antes, depois });
+  } catch (err) {
+    console.error('Erro geral:', err.message);
+    res.status(500).json({ error: 'Erro interno no servidor', details: err.message });
+  }
+});
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
+
+    console.log('---- DEBUG ----');
+    console.log('ID recebido:', id);
+    console.log('Body recebido:', req.body);
+
+    const { data: antes } = await supabase
+      .from('tb_Entrada')
+      .select('*')
+      .eq('Id', Number(id));
+
+    console.log('Antes do update:', antes);
+
+    const { data, error, status } = await supabase
+      .from('tb_Entrada')
+      .update({
+        ent_QtdFotosVendidas: Number(ent_QtdFotosVendidas),
+        ent_ValorTotal: Number(ent_ValorTotal)
+      })
+      .eq('Id', Number(id))
+      .select();
+
+    console.log('Status:', status);
+    console.log('Data retornada:', data);
+    console.log('Erro:', error);
+
+    const { data: depois } = await supabase
+      .from('tb_Entrada')
+      .select('*')
+      .eq('Id', Number(id));
+
+    console.log('Depois do update:', depois);
+    console.log('----------------');
+
+    if (error) {
+      return res.status(500).json({ error: 'Erro ao atualizar entrada', details: error });
+    }
+
+    res.status(200).json({ success: true, antes, depois });
+  } catch (err) {
+    console.error('Erro geral:', err.message);
+    res.status(500).json({ error: 'Erro interno no servidor', details: err.message });
+  }
+});
+
+
+
+/*router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
+
     if (!id) return res.status(400).json({ error: 'ID é obrigatório.' });
 
     const { data, error } = await supabase
@@ -169,7 +266,7 @@ router.put('/:id', async (req, res) => {
     console.error('Erro geral:', err.message);
     res.status(500).json({ error: 'Erro interno no servidor', details: err.message });
   }
-});
+});*/
 //=============================================
 // Excluir Entrada
 //=============================================
