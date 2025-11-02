@@ -143,9 +143,9 @@ router.post('/', async (req, res) => {
 //=============================================
 // Editar Entrada
 //=============================================
-router.put('/:id', async (req, res) => {
+router.put('/:Id', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { Id } = req.params;
     const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
 
     // validação simples
@@ -160,7 +160,7 @@ router.put('/:id', async (req, res) => {
     const { data, error } = await supabase
       .from('tb_Entrada')
       .update(dadosAtualizados)
-      .eq('id', id)
+      .eq('Id', id)
       .select()
       .single();
 
