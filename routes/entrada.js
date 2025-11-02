@@ -139,7 +139,25 @@ router.post('/', async (req, res) => {
 // ============================================
 // PUT - Atualizar entrada
 // ============================================
+router.put('/atualizar_recebimentos', async (req, res) => {
+  try {
+    const hojeSP = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const [dia, mes, ano] = hojeSP.split('/');
+    const isoHojeSP = `${ano}-${mes}-${dia}`;
 
+    const { data, error } = await supabase.rpc('atualizar_recebimentos', { hoje_param: isoHojeSP });
+
+    if (error) {
+      console.error('Erro Supabase:', error);
+      return res.status(500).json({ success: false, error: error.message || error });
+    }
+
+    res.json({ success: true, message: 'Recebimentos atualizados com sucesso!', data });
+  } catch (err) {
+    console.error('Erro geral:', err);
+    res.status(500).json({ success: false, error: 'Erro interno no servidor' });
+  }
+});
 //=============================================
 // Editar Entrada
 //=============================================
