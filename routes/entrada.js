@@ -1,4 +1,4 @@
-// routes/agenda.js
+// routes/Entrada.js
 const express = require('express');
 const router = express.Router();
 const supabase = require('../supabase');
@@ -160,8 +160,9 @@ router.put('/:id', async (req, res) => {
       ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
       })
       .eq('Id', id)
+      .limit(1)
       .select()
-      .maybesingle();
+      .single();
 
     if (error) {
       console.error('Erro ao atualizar entrada:', error.message);
