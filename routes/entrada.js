@@ -146,49 +146,18 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      ent_DataEntrada,
-      ent_TipoEvento,
-      ent_DataEvento,
-      ent_Plataforma,
-      ent_QtdFotosVendidas,
-      ent_ValorTotal,
-      ent_TipoPgto,
-      ent_Status,
-      ent_LiberarSaldo,
-      ent_DataPrevista,
-      ent_Mes,
-      ent_Ano,
-      ent_Evento
-    } = req.body;
+    const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
 
     if (!id) return res.status(400).json({ error: 'ID é obrigatório.' });
-
-    const dataEntrada = ent_DataEntrada ? new Date(ent_DataEntrada) : new Date();
-    const dataEvento = ent_DataEvento ? new Date(ent_DataEvento) : null;
-    const dataPrevista = ent_DataPrevista ? new Date(ent_DataPrevista) : null;
 
     const { data, error } = await supabase
       .from('tb_Entrada')
       .update({
-        ent_DataEntrada: dataEntrada.toISOString().split('T')[0],
-        ent_TipoEvento: Number(ent_TipoEvento),
-        ent_DataEvento: dataEvento ? dataEvento.toISOString().split('T')[0] : null,
-        ent_Plataforma: Number(ent_Plataforma),
         ent_QtdFotosVendidas: Number(ent_QtdFotosVendidas),
-        ent_ValorTotal: Number(ent_ValorTotal),
-        ent_TipoPgto,
-        ent_Status,
-        ent_LiberarSaldo: ent_LiberarSaldo ? Boolean(ent_LiberarSaldo) : false,
-        ent_DataPrevista: dataPrevista ? dataPrevista.toISOString().split('T')[0] : null,
-        ent_Mes,
-        ent_Ano,
-        ent_Evento: Number(ent_Evento)
+        ent_ValorTotal: Number(ent_ValorTotal)
       })
-      .eq('Id', id)
-      .select()
-      .limit(1);
-
+      .eq('Id', Number(id))
+      .select();
 
     if (error) {
       console.error('Erro ao atualizar entrada:', error);
@@ -201,44 +170,6 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro interno no servidor', details: err.message });
   }
 });
-
-/*router.put('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { ent_QtdFotosVendidas, 
-      ent_ValorTotal
-    } = req.body;
-
-    // validação simples
-    if (!id) return res.status(400).json({ error: 'ID é obrigatório' });
-
-    const { data, error } = await supabase
-      .from('tb_Entrada')
-      .update({
-        ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
-      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
-      })
-      .eq('Id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Erro ao atualizar entrada:', error.message);
-      return res.status(500).json({
-        error: 'Erro ao atualizar entrada',
-        details: error.message
-      });
-    }
-
-    res.status(200).json(data);
-  } catch (err) {
-    console.error('Erro inesperado ao atualizar entrada:', err.message);
-    res.status(500).json({
-      error: 'Erro inesperado ao atualizar entrada',
-      details: err.message
-    });
-  }
-});*/
 //=============================================
 // Excluir Entrada
 //=============================================
