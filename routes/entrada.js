@@ -161,6 +161,7 @@ router.put('/:id', async (req, res) => {
       })
       .eq('Id', id)
       .select()
+      .single();
 
     if (error) {
       console.error('Erro ao atualizar entrada:', error.message);
