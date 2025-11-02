@@ -146,20 +146,19 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
+    const { ent_QtdFotosVendidas, 
+      ent_ValorTotal
+    } = req.body;
 
     // validação simples
     if (!id) return res.status(400).json({ error: 'ID é obrigatório' });
 
-    // prepara campos a atualizar
-    const dadosAtualizados = {
-      ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
-      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0
-    };
-
     const { data, error } = await supabase
       .from('tb_Entrada')
-      .update(dadosAtualizados)
+      .update({
+        ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
+      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
+      })
       .eq('Id', id)
       .select()
       .single();
