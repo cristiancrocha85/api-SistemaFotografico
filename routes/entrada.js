@@ -160,9 +160,7 @@ router.put('/:id', async (req, res) => {
       ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
       })
       .eq('Id', id)
-      .limit(1)
       .select()
-      .single();
 
     if (error) {
       console.error('Erro ao atualizar entrada:', error.message);
