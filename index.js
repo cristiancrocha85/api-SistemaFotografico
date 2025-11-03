@@ -21,7 +21,7 @@ app.use('/api/plataforma', plataformaRouter);
 app.use('/api/eventos',eventosRouter);
 app.use('/api/agenda',agendaRouter);
 app.use('/api/entrada',entradaRouter);
-app.use('/api/medias',mediasRouter);
+
 
 // Status da API
 app.get('/api/status', (req, res) => {
