@@ -1,11 +1,8 @@
-// routes/plataforma.js
+// routes/media.js
 const express = require('express');
 const router = express.Router();
 const supabase = require('../supabase');
 
-//======================================================================
-// 
-//======================================================================
 router.get('/total/:idEvento', async (req, res) => {
   const { idEvento } = req.params;
 
@@ -24,3 +21,5 @@ router.get('/total/:idEvento', async (req, res) => {
     res.status(500).json({ error: 'Erro ao buscar total de fotos', details: err.message });
   }
 });
+
+module.exports = router;
