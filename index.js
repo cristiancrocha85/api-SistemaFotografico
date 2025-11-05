@@ -14,14 +14,14 @@ const plataformaRouter = require('./routes/plataforma');
 const eventosRouter = require('./routes/eventos');
 const agendaRouter = require('./routes/agenda');
 const entradaRouter = require('./routes/entrada');
-const mediaRouter = require('./routes/media');
+const mediasRouter = require('./routes/medias');
 
 // Usar Rotas
 app.use('/api/plataforma', plataformaRouter);
 app.use('/api/eventos',eventosRouter);
 app.use('/api/agenda',agendaRouter);
 app.use('/api/entrada',entradaRouter);
-app.use('/api/media',mediaRouter);
+app.use('/api/medias',mediasRouter);
 
 
 // Status da API
