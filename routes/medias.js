@@ -8,8 +8,8 @@ router.get('/total/:idEvento', async (req, res) => {
 
   try {
     const { data, error } = await supabase
-      .from('tb_Entradas')
-      .select('QtdFotos', { count: 'exact' })
+      .from('tb_Entrada')
+      .select('ent_QtdFotosVendidas', { count: 'exact' })
       .eq('IdEvento', idEvento);
 
     if (error) throw error;
