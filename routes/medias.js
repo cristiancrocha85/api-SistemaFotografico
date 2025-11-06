@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
         med_TotalUpload,        
         med_FotosVendidas,
         med_ValorTotal,
-        med_PercFotos,
+        med_PercFotosVend,
         med_ValorMedio,
         med_MediaFotosPlat,
         med_ValorMedioPlat
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
       med_TotalUpload: media.med_TotalUpload ,        
       med_FotosVendidas: media.med_FotosVendidas ,
       med_ValorTotal: media.med_ValorTotal ,
-      med_PercFotos: media.med_PercFotos ,
+      med_PercFotosVend: media.med_PercFotosVend ,
       med_ValorMedio: media.med_ValorMedio ,
       med_MediaFotosPlat: media.med_MediaFotosPlat ,
       med_ValorMedioPlat: media.med_ValorMedioPlat ,
