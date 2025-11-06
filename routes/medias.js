@@ -10,19 +10,7 @@ router.get('/', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('tb_Medias')
-      .select(`
-        Id,
-        med_Evento,
-        med_TipoEvento,
-        med_Plataforma,
-        med_TotalUpload,        
-        med_FotosVendidas,
-        med_ValorTotal,
-        med_PercFotosVend,
-        med_ValorMedio,
-        med_MediaFotosPlat,
-        med_ValorMedioPlat
-      `)
+      .select('Id, med_Evento, med_TipoEvento, med_Plataforma, med_TotalUpload, med_FotosVendidas, med_ValorTotal, med_PercFotosVend, med_ValorMedio, med_MediaFotosPlat, med_ValorMedioPlat')
       .order('Id', { ascending: false });
 
     if (error) {
