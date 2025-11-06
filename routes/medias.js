@@ -46,8 +46,8 @@ router.get('/', async (req, res) => {
 
     res.json(response);
   } catch (err) {
-    console.error("Erro inesperado ao buscar as médias:", err.message);
-    res.status(500).json({ error: 'Erro inesperado ao buscar as médias', details: err.message });
+  console.error("Erro inesperado ao buscar as médias:", err);
+  res.status(500).json({ error: 'Erro inesperado', details: err.message });
   }
 });
 //=========================================================================================
