@@ -3,6 +3,53 @@ const express = require('express');
 const router = express.Router();
 const supabase = require('../supabase');
 
+//=============================================
+// Listar Médias
+//=============================================
+router.get('/', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('tb_Medias')
+      .select(`
+        Id,
+        med_Evento,
+        med_TipoEvento,
+        med_Plataforma,
+        med_TotalUpload,        
+        med_FotosVendidas,
+        med_ValorTotal,
+        med_PercFotos,
+        med_ValorMedio,
+        med_MediaFotosPlat,
+        med_ValorMedioPlat
+      `)
+      .order('Id', { ascending: false });
+
+    if (error) {
+      console.error("Erro ao buscar as médias:", error.message);
+      return res.status(500).json({ error: 'Erro ao buscar as médias', details: error.message });
+    }
+
+    const response = (data || []).map(media => ({
+      Id: media.Id,
+      med_Evento: media.med_Evento,
+      med_TipoEvento: media.med_TipoEvento,
+      med_Plataforma: media.med_Plataforma ,
+      med_TotalUpload: media.med_TotalUpload ,        
+      med_FotosVendidas: media.med_FotosVendidas ,
+      med_ValorTotal: media.med_ValorTotal ,
+      med_PercFotos: media.med_PercFotos ,
+      med_ValorMedio: media.med_ValorMedio ,
+      med_MediaFotosPlat: media.med_MediaFotosPlat ,
+      med_ValorMedioPlat: media.med_ValorMedioPlat ,
+    }));
+
+    res.json(response);
+  } catch (err) {
+    console.error("Erro inesperado ao buscar as médias:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao buscar as médias', details: err.message });
+  }
+});
 //=========================================================================================
 // Medias
 //=========================================================================================
@@ -26,7 +73,6 @@ router.get('/totais/:idEvento', async (req, res) => {
     res.status(500).json({ error: 'Erro ao buscar totais', details: err.message });
   }
 });
-
 //=========================================================================================
 // Inserir
 //=========================================================================================
@@ -54,9 +100,7 @@ router.post('/', async (req, res) => {
       
     
     }
-
     res.status(201).json(data);
-
   } catch (err) {
     console.error("Erro inesperado ao inserir as médias:", err.message);
     res.status(500).json({ error: 'Erro inesperado ao inserir as médias', details: err.message });
