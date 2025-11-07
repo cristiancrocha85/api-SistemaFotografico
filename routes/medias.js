@@ -67,6 +67,52 @@ router.get('/totais/:idEvento', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const {
+      med_Evento,
+      med_TipoEvento,
+      med_Plataforma,
+      med_TotalUpload,
+      med_FotosVendidas,
+      med_ValorTotal,
+      med_PercFotosVend,
+      med_ValorMedio,
+      med_MediaFotosPlat,
+      med_ValorMedioPlat
+    } = req.body;
+
+    // Inserção completa no Supabase
+    const { data, error } = await supabase
+      .from('tb_Medias')
+      .insert([{
+        med_Evento: med_Evento ? Number(med_Evento) : null,
+        med_TipoEvento: med_TipoEvento || null,
+        med_Plataforma: med_Plataforma || null,
+        med_TotalUpload: med_TotalUpload ? Number(med_TotalUpload) : 0,
+        med_FotosVendidas: med_FotosVendidas ? Number(med_FotosVendidas) : 0,
+        med_ValorTotal: med_ValorTotal ? Number(String(med_ValorTotal).replace(',', '.')) : 0,
+        med_PercFotosVend: med_PercFotosVend ? Number(String(med_PercFotosVend).replace(',', '.')) : 0,
+        med_ValorMedio: med_ValorMedio ? Number(String(med_ValorMedio).replace(',', '.')) : 0,
+        med_MediaFotosPlat: med_MediaFotosPlat ? Number(med_MediaFotosPlat) : 0,
+        med_ValorMedioPlat: med_ValorMedioPlat ? Number(String(med_ValorMedioPlat).replace(',', '.')) : 0
+      }])
+      .select()
+      .single(); // retorna apenas um objeto
+
+    if (error) {
+      console.error('Erro ao inserir as médias:', error.message);
+      return res.status(500).json({ error: 'Erro ao inserir as médias', details: error });
+    }
+
+    res.status(201).json(data);
+  } catch (err) {
+    console.error('Erro inesperado ao inserir as médias:', err.message);
+    res.status(500).json({ error: 'Erro inesperado ao inserir as médias', details: err.message });
+  }
+});
+
+
+/*router.post('/', async (req, res) => {
+  try {
+    const {
       med_FotosVendidas,
       med_ValorTotal,
     } = req.body;
@@ -93,6 +139,6 @@ router.post('/', async (req, res) => {
     console.error("Erro inesperado ao inserir as médias:", err.message);
     res.status(500).json({ error: 'Erro inesperado ao inserir as médias', details: err.message });
   }
-});
+});*/
 
 module.exports = router;
