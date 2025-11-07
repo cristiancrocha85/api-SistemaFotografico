@@ -106,8 +106,7 @@ router.post('/', async (req, res) => {
         med_MediaFotosPlat: med_MediaFotosPlat ? Number(med_MediaFotosPlat) : 0,
         med_ValorMedioPlat: med_ValorMedioPlat ? Number(String(med_ValorMedioPlat).replace(',', '.')) : 0
       }])
-      .select()
-      .single(); // retorna apenas um objeto
+      .select();
 
     if (error) {
       console.error('Erro ao inserir as médias:', error.message);
@@ -120,7 +119,6 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Erro inesperado ao inserir as médias', details: err.message });
   }
 });
-
 
 /*router.post('/', async (req, res) => {
   try {
