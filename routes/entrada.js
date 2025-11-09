@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
 // ===================================
 // POST - Inserir Entrada
 // ===================================
-router.post('/', async (req, res) => {
+/*router.post('/', async (req, res) => {
   try {
     const {
       ent_DataEntrada,
@@ -134,7 +134,121 @@ router.post('/', async (req, res) => {
       details: err.message
     });
   }
+});*/
+
+// ===================================
+// POST - Inserir Entrada + Atualizar Médias
+// ===================================
+router.post('/', async (req, res) => {
+  try {
+    const {
+      ent_DataEntrada,
+      ent_Evento,
+      ent_TipoEvento,
+      ent_DataEvento,
+      ent_Plataforma,
+      ent_QtdFotosVendidas,
+      ent_ValorTotal,
+      ent_TipoPgto,
+      ent_Status,
+      ent_LiberarSaldo,
+      ent_DataPrevista,
+      ent_Mes,
+      ent_Ano
+    } = req.body;
+
+    // Função utilitária para converter qualquer formato de data em YYYY-MM-DD
+    const formatarData = (valor) => {
+      if (!valor) return null;
+      const data = new Date(valor);
+      if (isNaN(data)) return null;
+      return data.toISOString().split('T')[0];
+    };
+
+    // Prepara todas as datas formatadas
+    const dataEntrada = formatarData(ent_DataEntrada) || formatarData(new Date());
+    const dataEvento = formatarData(ent_DataEvento);
+    const dataPrevista = formatarData(ent_DataPrevista);
+
+    // Monta objeto final
+    const novaEntrada = {
+      ent_DataEntrada: dataEntrada,
+      ent_Evento: ent_Evento ? Number(ent_Evento) : null,
+      ent_TipoEvento,
+      ent_DataEvento: dataEvento,
+      ent_Plataforma,
+      ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
+      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
+      ent_TipoPgto,
+      ent_Status,
+      ent_LiberarSaldo,
+      ent_DataPrevista: dataPrevista,
+      ent_Mes,
+      ent_Ano
+    };
+
+    // 1️⃣ Inserir nova entrada
+    const { data, error } = await supabase
+      .from('tb_Entrada')
+      .insert([novaEntrada])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Erro ao inserir a entrada:", error.message);
+      return res.status(500).json({ error: 'Erro ao inserir a entrada', details: error.message });
+    }
+
+    // 2️⃣ Buscar totais atualizados do evento
+    const { data: vendas, error: errBusca } = await supabase
+      .from('tb_Entrada')
+      .select('ent_QtdFotosVendidas, ent_ValorTotal')
+      .eq('ent_Evento', ent_Evento);
+
+    if (errBusca) throw errBusca;
+
+    const totalFotos = vendas.reduce((acc, v) => acc + (v.ent_QtdFotosVendidas || 0), 0);
+    const totalValor = vendas.reduce((acc, v) => acc + (v.ent_ValorTotal || 0), 0);
+    const valorMedio = totalFotos > 0 ? totalValor / totalFotos : 0;
+
+    // 🔹 Busca total de fotos disponíveis no evento (ajuste conforme sua tabela)
+    const { data: eventoData } = await supabase
+      .from('tb_Agenda')
+      .select('ag_TotalFotos')
+      .eq('Id', ent_Evento)
+      .single();
+
+    const totalDisponivel = eventoData?.ag_TotalFotos || 0;
+    const percVendidas = totalDisponivel > 0 ? (totalFotos / totalDisponivel) * 100 : 0;
+
+    // 3️⃣ Atualizar tb_Medias
+    const { error: errMedias } = await supabase
+      .from('tb_Medias')
+      .update({
+        med_FotosVendidas: totalFotos,
+        med_ValorTotal: totalValor,
+        med_ValorMedio: valorMedio,
+        med_PercFotosVendidas: percVendidas
+      })
+      .eq('evento_id', ent_Evento);
+
+    if (errMedias) throw errMedias;
+
+    res.status(201).json({
+      sucesso: true,
+      entrada: data,
+      totalFotos,
+      totalValor,
+      valorMedio,
+      percVendidas
+    });
+
+  } catch (err) {
+    console.error("Erro inesperado ao inserir a entrada e atualizar médias:", err.message);
+    res.status(500).json({ error: 'Erro inesperado ao inserir a entrada e atualizar médias', details: err.message });
+  }
 });
+
 // ============================================
 // PUT - Atualizar entrada
 // ============================================
