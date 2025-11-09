@@ -95,7 +95,7 @@ router.post('/', async (req, res) => {
         ag_Evento: ag_Evento,
         ag_Plataforma: ag_Plataforma ? Number(ag_Plataforma) : null,
         ag_Local: ag_Local,
-        ag_DiasFaltantes: ag_DiasFaltantes ? Number(ag_DiasFaltantes) : null,
+        ag_DiasFaltantes: ag_DiasFaltantes == null ? null : Number(ag_DiasFaltantes),
         ag_Status: ag_Status,
         ag_Observacao: ag_Observacao,
         ag_Mes: ag_Mes,
