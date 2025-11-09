@@ -137,7 +137,7 @@ router.get('/', async (req, res) => {
 });*/
 
 // ===================================
-// POST - Inserir Entrada + Atualizar Médias
+// POST - Inserir Entrada e Atualizar Médias
 // ===================================
 router.post('/', async (req, res) => {
   try {
@@ -157,7 +157,6 @@ router.post('/', async (req, res) => {
       ent_Ano
     } = req.body;
 
-    // Função utilitária para converter qualquer formato de data em YYYY-MM-DD
     const formatarData = (valor) => {
       if (!valor) return null;
       const data = new Date(valor);
@@ -165,78 +164,64 @@ router.post('/', async (req, res) => {
       return data.toISOString().split('T')[0];
     };
 
-    // Prepara todas as datas formatadas
-    const dataEntrada = formatarData(ent_DataEntrada) || formatarData(new Date());
-    const dataEvento = formatarData(ent_DataEvento);
-    const dataPrevista = formatarData(ent_DataPrevista);
-
-    // Monta objeto final
     const novaEntrada = {
-      ent_DataEntrada: dataEntrada,
+      ent_DataEntrada: formatarData(ent_DataEntrada) || formatarData(new Date()),
       ent_Evento: ent_Evento ? Number(ent_Evento) : null,
       ent_TipoEvento,
-      ent_DataEvento: dataEvento,
+      ent_DataEvento: formatarData(ent_DataEvento),
       ent_Plataforma,
       ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
       ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
       ent_TipoPgto,
       ent_Status,
       ent_LiberarSaldo,
-      ent_DataPrevista: dataPrevista,
+      ent_DataPrevista: formatarData(ent_DataPrevista),
       ent_Mes,
       ent_Ano
     };
 
-    // 1️⃣ Inserir nova entrada
-    const { data, error } = await supabase
+    // 1️⃣ Inserir entrada
+    const { error: errEntrada } = await supabase
       .from('tb_Entrada')
-      .insert([novaEntrada])
-      .select()
-      .single();
+      .insert([novaEntrada]);
 
-    if (error) {
-      console.error("Erro ao inserir a entrada:", error.message);
-      return res.status(500).json({ error: 'Erro ao inserir a entrada', details: error.message });
-    }
+    if (errEntrada) throw new Error('Erro ao inserir entrada: ' + errEntrada.message);
 
-    // 2️⃣ Buscar totais atualizados do evento
+    // 2️⃣ Buscar totais do evento
     const { data: vendas, error: errBusca } = await supabase
       .from('tb_Entrada')
       .select('ent_QtdFotosVendidas, ent_ValorTotal')
       .eq('ent_Evento', ent_Evento);
 
-    if (errBusca) throw errBusca;
+    if (errBusca) throw new Error('Erro ao buscar totais: ' + errBusca.message);
 
     const totalFotos = vendas.reduce((acc, v) => acc + (v.ent_QtdFotosVendidas || 0), 0);
     const totalValor = vendas.reduce((acc, v) => acc + (v.ent_ValorTotal || 0), 0);
     const valorMedio = totalFotos > 0 ? totalValor / totalFotos : 0;
-
-    // 🔹 Busca total de fotos disponíveis no evento (ajuste conforme sua tabela)
-    const { data: eventoData } = await supabase
-      .from('tb_Agenda')
-      .select('ag_TotalFotos')
-      .eq('Id', ent_Evento)
-      .single();
-
-    const totalDisponivel = eventoData?.ag_TotalFotos || 0;
+    const totalDisponivel = 1000; // ajustar futuramente
     const percVendidas = totalDisponivel > 0 ? (totalFotos / totalDisponivel) * 100 : 0;
 
-    // 3️⃣ Atualizar tb_Medias
-    const { error: errMedias } = await supabase
+    // 3️⃣ Atualizar ou inserir médias
+    const { error: errUpsert } = await supabase
       .from('tb_Medias')
-      .update({
-        med_FotosVendidas: totalFotos,
-        med_ValorTotal: totalValor,
-        med_ValorMedio: valorMedio,
-        med_PercFotosVend: percVendidas
-      })
-      .eq('evento_id', ent_Evento);
+      .upsert(
+        {
+          med_Evento: ent_Evento,
+          med_TipoEvento: ent_TipoEvento,
+          med_Plataforma: ent_Plataforma,
+          med_FotosVendidas: totalFotos,
+          med_ValorTotal: totalValor,
+          med_ValorMedio: valorMedio,
+          med_PercFotosVend: percVendidas
+        },
+        { onConflict: 'med_Evento' }
+      );
 
-    if (errMedias) throw errMedias;
+    if (errUpsert) throw new Error('Erro ao atualizar tb_Medias: ' + errUpsert.message);
 
     res.status(201).json({
       sucesso: true,
-      entrada: data,
+      mensagem: 'Entrada inserida e médias atualizadas',
       totalFotos,
       totalValor,
       valorMedio,
@@ -244,10 +229,11 @@ router.post('/', async (req, res) => {
     });
 
   } catch (err) {
-    console.error("Erro inesperado ao inserir a entrada e atualizar médias:", err.message);
-    res.status(500).json({ error: 'Erro inesperado ao inserir a entrada e atualizar médias', details: err.message });
+    console.error('ERRO DETALHADO AO INSERIR/ATUALIZAR:', err);
+    res.status(500).json({ error: err.message });
   }
 });
+
 
 // ============================================
 // PUT - Atualizar entrada
