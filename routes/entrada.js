@@ -228,7 +228,7 @@ router.post('/', async (req, res) => {
         med_FotosVendidas: totalFotos,
         med_ValorTotal: totalValor,
         med_ValorMedio: valorMedio,
-        med_PercFotosVendidas: percVendidas
+        med_PercFotosVend: percVendidas
       })
       .eq('evento_id', ent_Evento);
 
