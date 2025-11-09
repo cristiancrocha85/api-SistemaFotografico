@@ -136,7 +136,7 @@ router.get('/', async (req, res) => {
   }
 });*/
 
-// ===================================
+/*// ===================================
 // POST - Inserir Entrada e Atualizar Médias
 // ===================================
 router.post('/', async (req, res) => {
@@ -232,8 +232,115 @@ router.post('/', async (req, res) => {
     console.error('ERRO DETALHADO AO INSERIR/ATUALIZAR:', err);
     res.status(500).json({ error: err.message });
   }
-});
+});*/
 
+// ===================================
+// POST - Inserir Entrada e Atualizar Médias
+// ===================================
+router.post('/', async (req, res) => {
+  try {
+    const {
+      ent_DataEntrada,
+      ent_Evento,
+      ent_TipoEvento,
+      ent_DataEvento,
+      ent_Plataforma,
+      ent_QtdFotosVendidas,
+      ent_ValorTotal,
+      ent_TipoPgto,
+      ent_Status,
+      ent_LiberarSaldo,
+      ent_DataPrevista,
+      ent_Mes,
+      ent_Ano
+    } = req.body;
+
+    const formatarData = (valor) => {
+      if (!valor) return null;
+      const data = new Date(valor);
+      if (isNaN(data)) return null;
+      return data.toISOString().split('T')[0];
+    };
+
+    const novaEntrada = {
+      ent_DataEntrada: formatarData(ent_DataEntrada) || formatarData(new Date()),
+      ent_Evento: ent_Evento ? Number(ent_Evento) : null,
+      ent_TipoEvento,
+      ent_DataEvento: formatarData(ent_DataEvento),
+      ent_Plataforma,
+      ent_QtdFotosVendidas: ent_QtdFotosVendidas ? Number(ent_QtdFotosVendidas) : 0,
+      ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
+      ent_TipoPgto,
+      ent_Status,
+      ent_LiberarSaldo,
+      ent_DataPrevista: formatarData(ent_DataPrevista),
+      ent_Mes,
+      ent_Ano
+    };
+
+    // 1️⃣ Inserir entrada
+    const { error: errEntrada } = await supabase
+      .from('tb_Entrada')
+      .insert([novaEntrada]);
+
+    if (errEntrada) throw new Error('Erro ao inserir entrada: ' + errEntrada.message);
+
+    // 2️⃣ Buscar total de fotos disponíveis do evento
+    const { data: dadosMedias, error: errTotal } = await supabase
+      .from('tb_Medias')
+      .select('med_TotalUpload')
+      .eq('med_Evento', ent_Evento)
+      .maybeSingle();
+
+    if (errTotal) throw new Error('Erro ao buscar total de fotos: ' + errTotal.message);
+
+    const totalDisponivel = dadosMedias?.med_TotalUpload || 0;
+
+    // 3️⃣ Buscar totais do evento (vendas)
+    const { data: vendas, error: errBusca } = await supabase
+      .from('tb_Entrada')
+      .select('ent_QtdFotosVendidas, ent_ValorTotal')
+      .eq('ent_Evento', ent_Evento);
+
+    if (errBusca) throw new Error('Erro ao buscar totais: ' + errBusca.message);
+
+    const totalFotos = vendas.reduce((acc, v) => acc + (v.ent_QtdFotosVendidas || 0), 0);
+    const totalValor = vendas.reduce((acc, v) => acc + (v.ent_ValorTotal || 0), 0);
+    const valorMedio = totalFotos > 0 ? totalValor / totalFotos : 0;
+    const percVendidas = totalDisponivel > 0 ? (totalFotos / totalDisponivel) * 100 : 0;
+
+    // 4️⃣ Atualizar tb_Medias
+    const { error: errUpsert } = await supabase
+      .from('tb_Medias')
+      .upsert(
+        {
+          med_Evento: ent_Evento,
+          med_TipoEvento: ent_TipoEvento,
+          med_Plataforma: ent_Plataforma,
+          med_FotosVendidas: totalFotos,
+          med_ValorTotal: totalValor,
+          med_ValorMedio: valorMedio,
+          med_PercFotosVend: percVendidas
+        },
+        { onConflict: 'med_Evento' }
+      );
+
+    if (errUpsert) throw new Error('Erro ao atualizar tb_Medias: ' + errUpsert.message);
+
+    res.status(201).json({
+      sucesso: true,
+      mensagem: 'Entrada inserida e médias atualizadas com sucesso',
+      totalFotos,
+      totalValor,
+      valorMedio,
+      percVendidas
+    });
+
+  } catch (err) {
+    console.error('ERRO DETALHADO AO INSERIR/ATUALIZAR:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ============================================
 // PUT - Atualizar entrada
