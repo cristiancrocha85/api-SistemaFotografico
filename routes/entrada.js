@@ -365,9 +365,78 @@ router.put('/atualizar_recebimentos', async (req, res) => {
   }
 });
 //=============================================
-// Editar Entrada
+// Editar Entrada e Atualizar Médias
 //=============================================
 router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { ent_QtdFotosVendidas, ent_ValorTotal, ent_Evento } = req.body;
+
+    if (!id || !ent_Evento)
+      return res.status(400).json({ error: 'ID e evento são obrigatórios.' });
+
+    // 1️⃣ Atualiza a entrada
+    const { error: errUpdate } = await supabase
+      .from('tb_Entrada')
+      .update({
+        ent_QtdFotosVendidas: Number(ent_QtdFotosVendidas),
+        ent_ValorTotal: Number(ent_ValorTotal)
+      })
+      .eq('Id', Number(id));
+
+    if (errUpdate) throw errUpdate;
+
+    // 2️⃣ Recalcula totais do evento
+    const { data: vendas, error: errBusca } = await supabase
+      .from('tb_Entrada')
+      .select('ent_QtdFotosVendidas, ent_ValorTotal')
+      .eq('ent_Evento', ent_Evento);
+
+    if (errBusca) throw errBusca;
+
+    const totalFotos = vendas.reduce((acc, v) => acc + (v.ent_QtdFotosVendidas || 0), 0);
+    const totalValor = vendas.reduce((acc, v) => acc + (v.ent_ValorTotal || 0), 0);
+    const valorMedio = totalFotos > 0 ? totalValor / totalFotos : 0;
+
+    // 3️⃣ Busca total de uploads no tb_Medias (pra calcular % real)
+    const { data: mediaAtual, error: errMedia } = await supabase
+      .from('tb_Medias')
+      .select('med_TotalUpload')
+      .eq('med_Evento', ent_Evento)
+      .single();
+
+    if (errMedia) throw errMedia;
+
+    const totalUpload = mediaAtual?.med_TotalUpload || 0;
+    const percVendidas = totalUpload > 0 ? (totalFotos / totalUpload) * 100 : 0;
+
+    // 4️⃣ Atualiza tb_Medias com novos valores
+    const { error: errUpMedias } = await supabase
+      .from('tb_Medias')
+      .update({
+        med_FotosVendidas: totalFotos,
+        med_ValorTotal: totalValor,
+        med_ValorMedio: valorMedio,
+        med_PercFotosVend: percVendidas
+      })
+      .eq('med_Evento', ent_Evento);
+
+    if (errUpMedias) throw errUpMedias;
+
+    res.status(200).json({
+      success: true,
+      message: 'Entrada e médias atualizadas com sucesso',
+      totalFotos,
+      totalValor,
+      valorMedio,
+      percVendidas
+    });
+  } catch (err) {
+    console.error('Erro ao atualizar entrada e médias:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+/*router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { ent_QtdFotosVendidas, ent_ValorTotal } = req.body;
@@ -393,7 +462,7 @@ router.put('/:id', async (req, res) => {
     console.error('Erro geral:', err.message);
     res.status(500).json({ error: 'Erro interno no servidor', details: err.message });
   }
-});
+});*/
 //=============================================
 // Excluir Entrada
 //=============================================
