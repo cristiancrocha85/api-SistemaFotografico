@@ -119,6 +119,52 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Erro inesperado ao inserir as médias', details: err.message });
   }
 });
+// ===================================
+// PUT - Atualizar 
+// ===================================
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { med_MediaFotosPlat, med_ValorMedioPlat, med_TotalUpload } = req.body;
+
+  try {
+    // 1️⃣ Buscar o registro atual pra pegar fotos vendidas
+    const { data: registro, error: errBusca } = await supabase
+      .from('tb_Medias')
+      .select('med_FotosVendidas')
+      .eq('Id', id)
+      .single();
+
+    if (errBusca) throw new Error('Erro ao buscar registro: ' + errBusca.message);
+
+    const fotosVendidas = registro?.med_FotosVendidas || 0;
+    const totalUpload = med_TotalUpload ? Number(med_TotalUpload) : 0;
+    const percVendidas = totalUpload > 0 ? (fotosVendidas / totalUpload) * 100 : 0;
+
+    // 2️⃣ Atualizar dados + percentual recalculado
+    const { error: errAtualiza } = await supabase
+      .from('tb_Medias')
+      .update({
+        med_MediaFotosPlat: med_MediaFotosPlat ? Number(med_MediaFotosPlat) : null,
+        med_ValorMedioPlat: med_ValorMedioPlat
+          ? Number(String(med_ValorMedioPlat).replace(',', '.'))
+          : null,
+        med_TotalUpload: totalUpload,
+        med_PercFotosVend: percVendidas
+      })
+      .eq('Id', id);
+
+    if (errAtualiza) throw new Error('Erro ao atualizar médias: ' + errAtualiza.message);
+
+    res.status(200).json({
+      sucesso: true,
+      mensagem: 'Campos atualizados e percentual recalculado com sucesso.',
+      percVendidas
+    });
+  } catch (err) {
+    console.error('Erro ao atualizar tb_Medias:', err.message);
+    res.status(500).json({ erro: 'Erro ao atualizar médias.', detalhe: err.message });
+  }
+});
 
 /*router.post('/', async (req, res) => {
   try {
