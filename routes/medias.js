@@ -11,8 +11,7 @@ router.get('/', async (req, res) => {
     const { data, error } = await supabase
       .from('tb_Medias')
       .select(`
-        Id,
-        med_Evento,
+        Id,        
         med_TipoEvento,
         med_Plataforma,
         med_TotalUpload,
@@ -21,7 +20,9 @@ router.get('/', async (req, res) => {
         med_PercFotosVend,
         med_ValorMedio,
         med_MediaFotosPlat,
-        med_ValorMedioPlat
+        med_ValorMedioPlat,
+        med_Evento,
+        tb_Agenda (ag_Evento)
       `)
       .order('Id', { ascending: false });
 
@@ -31,8 +32,7 @@ router.get('/', async (req, res) => {
     }
 
     const response = (data || []).map(media => ({
-      Id: media.Id,
-      med_Evento: media.med_Evento,
+      Id: media.Id,      
       med_TipoEvento: media.med_TipoEvento,
       med_Plataforma: media.med_Plataforma ,
       med_TotalUpload: media.med_TotalUpload ,        
@@ -42,6 +42,8 @@ router.get('/', async (req, res) => {
       med_ValorMedio: media.med_ValorMedio ,
       med_MediaFotosPlat: media.med_MediaFotosPlat ,
       med_ValorMedioPlat: media.med_ValorMedioPlat ,
+      med_Evento: media.med_Evento,
+      Evento: media.tb_Agenda?.ag_Evento || null,
     }));
 
     res.json(response);
