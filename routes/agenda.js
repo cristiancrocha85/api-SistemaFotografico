@@ -71,6 +71,7 @@ router.post('/', async (req, res) => {
       ag_Observacao,
       ag_Mes,
       ag_Ano,
+      ag_Realizado = false
     } = req.body;
 
     // Valida apenas o que é realmente obrigatório
@@ -99,7 +100,8 @@ router.post('/', async (req, res) => {
         ag_Status: ag_Status,
         ag_Observacao: ag_Observacao,
         ag_Mes: ag_Mes,
-        ag_Ano: ag_Ano
+        ag_Ano: ag_Ano,
+        ag_Realizado
       }])
       .select()
       .single(); // retorna apenas um objeto
@@ -155,7 +157,8 @@ router.put('/:id', async (req, res) => {
       ag_Status,
       ag_Observacao,
       ag_Mes,
-      ag_Ano
+      ag_Ano,
+      ag_Realizado
     } = req.body;
 
     if (!id) return res.status(400).json({ error: 'ID é obrigatório.' });
@@ -177,7 +180,8 @@ router.put('/:id', async (req, res) => {
         ag_Status,
         ag_Observacao,
         ag_Mes,
-        ag_Ano
+        ag_Ano,
+        ag_Realizado
       })
       .eq('Id', id)
       .select()
