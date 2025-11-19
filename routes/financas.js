@@ -30,39 +30,26 @@ router.get('/vendas-mes', async (req, res) => {
   }
 });
 
-
-/*router.get('/vendas-mes', async (req, res) => {
+// ================================
+// GET /financas/vendas-ano
+// ================================
+router.get('/vendas-ano', async (req, res) => {
   try {
-    const hoje = new Date();
-    const mesAtual = hoje.getMonth() + 1; // 1-12
-    const anoAtual = hoje.getFullYear();
 
     const { data, error } = await supabase
       .from('tb_Entrada')
-      .select('ent_ValorTotal')
-      .eq('ent_Mes', mesAtual.toString())   // "11", "12"...
-      .eq('ent_Ano', anoAtual.toString()); // "2025"
+      .select('ent_ValorTotal');
 
-    if (error) {
-      console.error("Erro ao buscar vendas:", error.message);
-      return res.status(500).json({ error: 'Erro ao buscar vendas', details: error.message });
-    }
+    if (error) return res.status(500).json({ error: error.message });
 
-    const totalMes = (data || []).reduce(
-      (acc, item) => acc + (item.ent_ValorTotal || 0),
-      0
+    const total = (data || []).reduce(
+      (acc, item) => acc + (item.ent_ValorTotal || 0), 0
     );
 
-    res.json({
-      mes: mesAtual,
-      ano: anoAtual,
-      vendasMes: totalMes
-    });
+    res.json({ vendasAno: total });
 
   } catch (err) {
-    console.error("Erro inesperado:", err);
-    res.status(500).json({ error: 'Erro inesperado', details: err.message });
+    res.status(500).json({ error: err.message });
   }
-});*/
-
+});
 module.exports = router;
