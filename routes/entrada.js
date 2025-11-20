@@ -308,7 +308,7 @@ router.get('/vendas-ano', async (req, res) => {
       data?.[0]?.VendasAno ??
       0;
 
-    res.json({ vendasAno: total });
+    res.json({ VendasAno: total });
 
   } catch (err) {
     console.error("Falha interna:", err.message);
