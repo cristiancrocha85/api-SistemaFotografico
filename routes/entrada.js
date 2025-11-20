@@ -299,7 +299,7 @@ router.get('/vendas-ano', async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
 
-    res.json({ vendasAno: parseFloat(data) || 0 });
+    res.json({ vendasAno: parseFloat(data[0]?.vendasano) || 0 });
 
   } catch (err) {
     console.error("Falha interna:", err.message);
