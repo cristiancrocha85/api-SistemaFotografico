@@ -35,21 +35,21 @@ router.get('/vendas-mes', async (req, res) => {
 // ================================
 router.get('/vendas-ano', async (req, res) => {
   try {
+    const { data, error } = await supabase.rpc('vendas_total_ano');
 
-    const { data, error } = await supabase
-      .from('tb_Entrada')
-      .select('ent_ValorTotal');
+    if (error) {
+      console.error("Erro ao calcular vendas do ano:", error.message);
+      return res.status(500).json({ error: 'Erro ao calcular vendas do ano', details: error.message });
+    }
 
-    if (error) return res.status(500).json({ error: error.message });
-
-    const total = (data || []).reduce(
-      (acc, item) => acc + (item.ent_ValorTotal || 0), 0
-    );
-
-    res.json({ vendasAno: total });
+    res.json({
+      vendasAno: parseFloat(data[0].vendas)
+    });
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Erro inesperado:", err.message);
+    res.status(500).json({ error: 'Erro inesperado', details: err.message });
   }
 });
+
 module.exports = router;
