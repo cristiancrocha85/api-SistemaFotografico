@@ -287,43 +287,5 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro inesperado ao excluir a entrada', details: err.message });
   }
 });
-// ===================================
-// Total Ano
-// ===================================
-
-router.get('/vendas-ano', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('vendas_total_ano');
-
-    if (error) {
-      console.error("Erro ao buscar vendas do ano:", error.message);
-      return res.status(500).json({ error: error.message });
-    }
-
-    res.json({
-      VendasAno: parseFloat(data[0].vendasano) // EXACTO
-    });
-
-  } catch (err) {
-    console.error("Erro inesperado:", err.message);
-    res.status(500).json({ error: err.message });
-  }
-});
-/*router.get('/vendas-ano', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('vendas_total_ano');
-
-    if (error) {
-      console.error("Erro no RPC:", error.message);
-      return res.status(500).json({ error: error.message });
-    }
-
-    res.json({ vendasAno: parseFloat(data[0]?.vendasano) || 0 });
-
-  } catch (err) {
-    console.error("Falha interna:", err.message);
-    res.status(500).json({ error: err.message });
-  }
-});*/
 
 module.exports = router;
