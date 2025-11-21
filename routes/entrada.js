@@ -295,26 +295,20 @@ router.get('/vendas-ano', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('vendas_total_ano');
 
-    console.log("DATA RPC:", data);
-
     if (error) {
-      console.error("Erro no RPC:", error.message);
+      console.error("Erro ao buscar vendas do ano:", error.message);
       return res.status(500).json({ error: error.message });
     }
 
-    // Supabase SEMPRE devolve snake_case lowercase
-    const total = data?.[0]?.vendasano ?? 0;
+    res.json({
+      VendasAno: parseFloat(data[0].vendasano) // EXACTO
+    });
 
-    res.json({ vendasAno: total }); // <-- mantém camelCase pro C#
-    
   } catch (err) {
-    console.error("Falha interna:", err.message);
+    console.error("Erro inesperado:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
-
-
-
 /*router.get('/vendas-ano', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('vendas_total_ano');
