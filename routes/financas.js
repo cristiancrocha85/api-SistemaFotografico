@@ -29,7 +29,6 @@ router.get('/vendas-mes', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 // =============================================
 // Total recebido do mês
 // =============================================
@@ -51,4 +50,25 @@ router.get('/totalmes', async (req, res) => {
     });
   }
 });
+// =============================================
+// Total recebido do ano
+// =============================================
+router.get('/totalano', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_recebido_ano');
+
+    if (error) throw error;
+
+    return res.json({
+      totalFaturadoAno: data ?? 0
+    });
+
+  } catch (err) {
+    console.error('Erro RPC total_recebido_ano:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total do ano.'
+    });
+  }
+});
+
 module.exports = router;
