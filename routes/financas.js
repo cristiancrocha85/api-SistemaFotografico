@@ -85,5 +85,21 @@ router.get('/totalmes-plataformas', async (req, res) => {
     });
   }
 });
+router.get('/totalano-plataformas', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_por_plataforma_ano');
+
+    if (error) throw error;
+
+    return res.json({ plataformas: data });
+
+  } catch (err) {
+    console.error('Erro RPC total_por_plataforma_ano:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total de plataformas no ano.'
+    });
+  }
+});
+
 
 module.exports = router;
