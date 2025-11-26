@@ -116,5 +116,4 @@ router.get('/total-5anos-anteriores', async (req, res) => {
   }
 });
 
-
 module.exports = router;
