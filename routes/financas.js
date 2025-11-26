@@ -127,15 +127,27 @@ router.get('/total-5anos-anteriores', async (req, res) => {
 // =============================================
 // Contagem Eventos Mes e Ano
 // =============================================
-router.get('/mes-ano', async (req, res) => {
+router.get('/eventos-mes', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('fn_eventos_mes_ano');
-
+    const { data, error } = await supabase.rpc('total_eventos_mes');
     if (error) throw error;
 
-    res.json(data[0]); // retorna { eventos_mes, eventos_ano }
+    return res.json({ total: data });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error('Erro eventos mês:', err);
+    return res.status(500).json({ erro: 'Falha ao buscar total de eventos' });
+  }
+});
+
+router.get('/eventos-ano', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_eventos_ano');
+    if (error) throw error;
+
+    return res.json({ total: data });
+  } catch (err) {
+    console.error('Erro eventos ano:', err);
+    return res.status(500).json({ erro: 'Falha ao buscar total de eventos' });
   }
 });
 
