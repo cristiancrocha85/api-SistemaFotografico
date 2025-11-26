@@ -70,6 +70,9 @@ router.get('/totalano', async (req, res) => {
     });
   }
 });
+// =============================================
+// Total Mes Plataforma
+// =============================================
 router.get('/totalmes-plataformas', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('total_por_plataforma_mes');
@@ -85,6 +88,9 @@ router.get('/totalmes-plataformas', async (req, res) => {
     });
   }
 });
+// =============================================
+// Total Ano Plataforma
+// =============================================
 router.get('/totalano-plataformas', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('total_por_plataforma_ano');
@@ -100,6 +106,9 @@ router.get('/totalano-plataformas', async (req, res) => {
     });
   }
 });
+// =============================================
+// Total 5 anos Anteriores
+// =============================================
 router.get('/total-5anos-anteriores', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('total_por_ano_5anos_anteriores');
@@ -113,6 +122,20 @@ router.get('/total-5anos-anteriores', async (req, res) => {
     return res.status(500).json({
       erro: 'Falha ao buscar total dos 5 anos anteriores.'
     });
+  }
+});
+// =============================================
+// Contagem Eventos Mes e Ano
+// =============================================
+router.get('/mes-ano', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('fn_eventos_mes_ano');
+
+    if (error) throw error;
+
+    res.json(data[0]); // retorna { eventos_mes, eventos_ano }
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
