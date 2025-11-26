@@ -100,6 +100,21 @@ router.get('/totalano-plataformas', async (req, res) => {
     });
   }
 });
+router.get('/total-5anos-anteriores', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_por_ano_5anos_anteriores');
+
+    if (error) throw error;
+
+    return res.json({ anos: data });
+
+  } catch (err) {
+    console.error('Erro RPC total_por_ano_5anos_anteriores:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total dos 5 anos anteriores.'
+    });
+  }
+});
 
 
 module.exports = router;
