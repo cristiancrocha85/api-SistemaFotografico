@@ -150,5 +150,22 @@ router.get('/eventos-ano', async (req, res) => {
     return res.status(500).json({ erro: 'Falha ao buscar total de eventos' });
   }
 });
+// =============================================
+// Total Meses
+// =============================================
+router.get('/total-meses-ano', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_por_mes_ano');
+
+    if (error) throw error;
+
+    return res.json({ meses: data });
+  } catch (err) {
+    console.error('Erro RPC total_por_mes_ano:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total de meses.'
+    });
+  }
+});
 
 module.exports = router;
