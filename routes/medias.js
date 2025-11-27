@@ -186,5 +186,21 @@ router.get("/top3-mes/:mes/:ano", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// =============================================
+// Top 3 Ano
+// =============================================
+router.get("/top3-ano/:ano", async (req, res) => {
+  try {
+    const ano = parseInt(req.params.ano);
+
+    const { data, error } = await supabase.rpc("fn_top3_ano", { y: ano });
+
+    if (error) throw error;
+
+    res.json({ top3: data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;
