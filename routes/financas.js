@@ -167,5 +167,22 @@ router.get('/total-meses-ano', async (req, res) => {
     });
   }
 });
+// =============================================
+// Top 3 Meses
+// =============================================
+router.get("/top3-mes/:mes/:ano", async (req, res) => {
+  try {
+    const mes = parseInt(req.params.mes);
+    const ano = parseInt(req.params.ano);
 
+    const { data, error } = await supabase
+      .rpc("fn_top3_mes", { m: mes, y: ano });
+
+    if (error) throw error;
+
+    res.json({ top3: data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = router;
