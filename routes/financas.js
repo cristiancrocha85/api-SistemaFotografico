@@ -166,26 +166,19 @@ router.get('/total-meses-ano', async (req, res) => {
     });
   }
 });
-// ================================
-// Total mês dinâmico (usando RPC fn_total_mes)
-// ================================
-router.get('/totalmes/:mes/:ano', async (req, res) => {
+// =============================================
+// Comparativo 2 últimos meses fechados
+// =============================================
+router.get('/comparativo-2-meses', async (req, res) => {
   try {
-    const mes = parseInt(req.params.mes);
-    const ano = parseInt(req.params.ano);
-
-    const { data, error } = await supabase.rpc('fn_total_mes', { m: mes, a: ano });
-
+    const { data, error } = await supabase.rpc('comparativo_2_meses');
     if (error) throw error;
 
-    return res.json({
-      totalMes: data ?? 0
-    });
-
+    return res.json({ comparativo: data[0] });
   } catch (err) {
-    console.error('Erro RPC fn_total_mes:', err);
+    console.error('Erro RPC comparativo_2_meses:', err);
     return res.status(500).json({
-      erro: 'Falha ao buscar total do mês.'
+      erro: 'Falha ao buscar comparativo dos meses.'
     });
   }
 });
