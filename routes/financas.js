@@ -166,8 +166,9 @@ router.get('/total-meses-ano', async (req, res) => {
     });
   }
 });
-
-//==============================================
+//===================================================
+// Total Mes Passado
+//===================================================
 router.get('/totalmespassado', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -186,6 +187,8 @@ router.get('/totalmespassado', async (req, res) => {
     });
   }
 });
+//===================================================
+// Total Mes Retrasado
 //===================================================
 router.get('/totalmesretrasado', async (req, res) => {
   try {
