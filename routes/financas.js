@@ -209,25 +209,6 @@ router.get('/totalmesretrasado', async (req, res) => {
   }
 });
 //===================================================
-router.get('/totais-plataforma-ano/:year?', async (req, res) => {
-  try {
-    const year = parseInt(req.params.year) || new Date().getFullYear();
-
-    const { data, error } = await supabase
-      .rpc('totais_por_plataforma_ano', { p_year: year });
-
-    if (error) throw error;
-
-    return res.json({ ano: year, totais: data || [] });
-
-  } catch (err) {
-    console.error('Erro RPC totais_por_plataforma_ano:', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar totais por plataforma.'
-    });
-  }
-});
-//===================================================
 router.get('/plataformas-meses', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('total_plataforma_meses');
