@@ -5,7 +5,7 @@ const supabase = require('../supabase');
 // ================================
 // GET /financas/vendas-mes
 // ================================
-router.get('/vendas-mes', async (req, res) => {
+/*router.get('/vendas-mes', async (req, res) => {
   try {
     const hoje = new Date();
     const inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
@@ -28,7 +28,7 @@ router.get('/vendas-mes', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
+});*/
 // =============================================
 // Total recebido do mês
 // =============================================
@@ -205,6 +205,39 @@ router.get('/totalmesretrasado', async (req, res) => {
     console.error('Erro RPC total_recebido_mes:_passado', err);
     return res.status(500).json({
       erro: 'Falha ao buscar total do mês.'
+    });
+  }
+});
+//===================================================
+router.get('/totais-plataforma-ano/:year?', async (req, res) => {
+  try {
+    const year = parseInt(req.params.year) || new Date().getFullYear();
+
+    const { data, error } = await supabase
+      .rpc('totais_por_plataforma_ano', { p_year: year });
+
+    if (error) throw error;
+
+    return res.json({ ano: year, totais: data || [] });
+
+  } catch (err) {
+    console.error('Erro RPC totais_por_plataforma_ano:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar totais por plataforma.'
+    });
+  }
+});
+//===================================================
+router.get('/plataformas-meses', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_plataforma_meses');
+
+    if (error) throw error;
+
+    return res.json(data);
+  } catch (err) {
+    return res.status(500).json({
+      erro: 'Falha ao buscar dados por plataforma e mês.'
     });
   }
 });
