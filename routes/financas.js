@@ -186,5 +186,24 @@ router.get('/totalmespassado', async (req, res) => {
     });
   }
 });
+//===================================================
+router.get('/totalmesretrasado', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('total_recebido_mes_passado');
+
+    if (error) throw error;
+
+    return res.json({
+      totalFaturadoMes: data
+    });
+
+  } catch (err) {
+    console.error('Erro RPC total_recebido_mes:_passado', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total do mês.'
+    });
+  }
+});
 
 module.exports = router;
