@@ -193,7 +193,7 @@ router.get('/totalmespassado', async (req, res) => {
 router.get('/totalmesretrasado', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .rpc('total_recebido_mes_passado');
+      .rpc('total_recebido_mes_retrasado');
 
     if (error) throw error;
 
