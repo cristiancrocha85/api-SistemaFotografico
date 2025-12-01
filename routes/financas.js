@@ -227,61 +227,17 @@ router.get('/totais-plataforma-ano', async (req, res) => {
 //===================================================
 // GET Soma Vendas Mês
 //===================================================
-router.get('/soma-fotos-mes', async (req, res) => {
-  try {
-    const { mes, ano } = req.query;
-
-    if (!mes || !ano) {
-      return res.status(400).json({ erro: 'mes e ano são obrigatórios' });
-    }
-
-    const { data, error } = await supabase.rpc('soma_fotos_mes', {
-      mes_param: mes,
-      ano_param: ano
-    });
-
-    if (error) throw error;
-
-    // Normaliza retorno do RPC para um número
-    let total = 0;
-    if (Array.isArray(data)) {
-      if (data.length === 0) total = 0;
-      else {
-        const first = data[0];
-        if (first && typeof first === 'object') {
-          const v = Object.values(first)[0];
-          total = Number(v ?? 0);
-        } else {
-          total = Number(first ?? 0);
-        }
-      }
-    } else {
-      total = Number(data ?? 0);
-    }
-
-    res.json({ total });
-  } catch (err) {
-    console.error('Erro RPC soma-fotos-mes:', err);
-    res.status(500).json({ erro: 'Falha ao buscar soma de fotos do mês.' });
-  }
-});
-
-router.get('/qtd_total_mes', async (req, res) => {
+router.get('/total-fotos-mes-atual', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .rpc('qtd_Soma_Vendida_Mes');
+      .rpc('qtd_fotos_mes_atual');
 
     if (error) throw error;
 
-    return res.json({
-      totalFaturadoMes: data
-    });
-
+    res.json({ totalFaturadoMes: data ?? 0 });
   } catch (err) {
-    console.error('Erro RPC total_recebido_mes:', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar total do mês.'
-    });
+    console.error('Erro RPC total-fotos-mes-atual:', err);
+    res.status(500).json({ erro: 'Falha ao buscar total do mês atual.' });
   }
 });
 
