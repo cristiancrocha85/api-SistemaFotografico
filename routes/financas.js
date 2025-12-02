@@ -256,5 +256,20 @@ router.get('/total-fotos-ano-atual', async (req, res) => {
     res.status(500).json({ erro: 'Falha ao buscar total do ano atual.' });
   }
 });
+//===================================================
+// Saldo Liberado
+//===================================================
+router.get('/saldo-disponivel', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('saldo_disponivel');
 
+    if (error) throw error;
+
+    res.json({ saldoDisponivel: data ?? 0 });
+  } catch (err) {
+    console.error('Erro RPC saldo-disponivel:', err);
+    res.status(500).json({ erro: 'Falha ao buscar saldo disponível.' });
+  }
+});
 module.exports = router;
