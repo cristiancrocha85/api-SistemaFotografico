@@ -289,4 +289,19 @@ router.get('/saldo-bloqueado', async (req, res) => {
   }
 });
 
+router.get('/previsao-salarial', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('previsao_salarial');
+
+    if (error) throw error;
+
+    res.json({ previsaoSalarial: data ?? 0 });
+  } catch (err) {
+    console.error('Erro RPC previsao-salarial:', err);
+    res.status(500).json({ erro: 'Falha ao buscar previsão salarial.' });
+  }
+});
+
+
 module.exports = router;
