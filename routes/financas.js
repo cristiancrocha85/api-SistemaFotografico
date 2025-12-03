@@ -272,4 +272,21 @@ router.get('/saldo-disponivel', async (req, res) => {
     res.status(500).json({ erro: 'Falha ao buscar saldo disponível.' });
   }
 });
+//===================================================
+// Saldo Blqueado
+//===================================================
+router.get('/saldo-bloqueado', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('saldo_bloqueado');
+
+    if (error) throw error;
+
+    res.json({ saldoBloqueado: data ?? 0 });
+  } catch (err) {
+    console.error('Erro RPC saldo-bloqueado:', err);
+    res.status(500).json({ erro: 'Falha ao buscar saldo bloqueado.' });
+  }
+});
+
 module.exports = router;
