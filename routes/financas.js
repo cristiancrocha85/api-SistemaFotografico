@@ -273,7 +273,7 @@ router.get('/saldo-disponivel', async (req, res) => {
   }
 });
 //===================================================
-// Saldo Blqueado
+// Saldo Bloqueado
 //===================================================
 router.get('/saldo-bloqueado', async (req, res) => {
   try {
@@ -288,20 +288,27 @@ router.get('/saldo-bloqueado', async (req, res) => {
     res.status(500).json({ erro: 'Falha ao buscar saldo bloqueado.' });
   }
 });
-
+//===================================================
+// Previsão Salarial
+//===================================================
 router.get('/previsao-salarial', async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .rpc('previsao_salarial');
+    const { data, error } = await supabase.rpc('previsao_salarial');
 
-    if (error) throw error;
+    if (error) {
+      console.error('Erro RPC previsao-salarial:', error);
+      return res.json({ previsaoSalarial: 0 }); // fallback
+    }
 
-    res.json({ previsaoSalarial: data ?? 0 });
+    // Se vier null (porque não tem vendas), padroniza
+    const valor = data ?? 0;
+
+    res.json({ previsaoSalarial: valor });
+
   } catch (err) {
-    console.error('Erro RPC previsao-salarial:', err);
-    res.status(500).json({ erro: 'Falha ao buscar previsão salarial.' });
+    console.error('Erro RPC previsao-salarial (catch):', err);
+    res.json({ previsaoSalarial: 0 }); // fallback geral
   }
 });
-
 
 module.exports = router;
