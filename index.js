@@ -16,6 +16,7 @@ const agendaRouter = require('./routes/agenda');
 const entradaRouter = require('./routes/entrada');
 const mediasRouter = require('./routes/medias');
 const financasRouter = require('./routes/financas');
+const salarioRouter = require('./routes/salario');
 
 // Usar Rotas
 app.use('/api/plataforma', plataformaRouter);
@@ -24,6 +25,7 @@ app.use('/api/agenda',agendaRouter);
 app.use('/api/entrada',entradaRouter);
 app.use('/api/medias',mediasRouter);
 app.use('/api/financas',financasRouter);
+app.use('/api/salario', salarioRouter);
 
 
 // Status da API
