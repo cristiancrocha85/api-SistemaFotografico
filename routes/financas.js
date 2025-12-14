@@ -232,17 +232,17 @@ router.get('/total-fotos-ano-atual', async (req, res) => {
 //===================================================
 // Saldo Liberado
 //===================================================
-router.get('/saldo-disponivel', async (req, res) => {
+router.get('/saldo', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .rpc('saldo_disponivel');
+      .rpc('saldo');
 
     if (error) throw error;
 
     res.json({ saldoDisponivel: data ?? 0 });
   } catch (err) {
     console.error('Erro RPC saldo-disponivel:', err);
-    res.status(500).json({ erro: 'Falha ao buscar saldo disponível.' });
+    res.status(500).json({ erro: 'Falha ao buscar o saldo.' });
   }
 });
 //===================================================
@@ -283,5 +283,33 @@ router.get('/previsao-salarial', async (req, res) => {
     res.json({ previsaoSalarial: 0 }); // fallback geral
   }
 });
+//====================================================================
+//Salario Mês
+//====================================================================
+router.get('/salario-do-mes', async (req, res) => {
+  const { mes, ano } = req.query;
+
+  try {
+    const { data, error } = await supabase
+      .rpc('total_salario_mes', {
+        p_mes: mes,
+        p_ano: ano
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({
+      totalSalario: data ?? 0
+    });
+  } catch (err) {
+    console.error('Erro RPC salario-mes:', err);
+    res.status(500).json({
+      erro: 'Falha ao buscar total de salário.'
+    });
+  }
+});
+
 
 module.exports = router;
