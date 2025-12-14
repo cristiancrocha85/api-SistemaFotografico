@@ -241,7 +241,7 @@ router.get('/saldo', async (req, res) => {
 
     res.json({ saldoDisponivel: data ?? 0 });
   } catch (err) {
-    console.error('Erro RPC saldo-disponivel:', err);
+    console.error('Erro RPC saldo:', err);
     res.status(500).json({ erro: 'Falha ao buscar o saldo.' });
   }
 });
@@ -291,7 +291,7 @@ router.get('/salario-do-mes', async (req, res) => {
 
   try {
     const { data, error } = await supabase
-      .rpc('total_salario_mes', {
+      .rpc('salario_mes', {
         p_mes: mes,
         p_ano: ano
       });
