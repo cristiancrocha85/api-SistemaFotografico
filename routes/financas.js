@@ -324,13 +324,16 @@ router.get('/adiantamento-mes', async (req, res) => {
 
     if (error) throw error;
 
+    const total = data?.[0]?.adiantamento_mes ?? 0;
+
     res.json({
-      totalAdiantamento: data ?? 0
+      totalAdiantamento: total
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: 'Erro ao buscar adiantamento' });
   }
 });
+
 
 module.exports = router;
