@@ -310,6 +310,27 @@ router.get('/salario-do-mes', async (req, res) => {
     });
   }
 });
+//====================================================================
+//Adiantamento Mês
+//====================================================================
+router.get('/adiantamento-mes', async (req, res) => {
+  const { mes, ano } = req.query;
 
+  try {
+    const { data, error } = await supabase.rpc('adiantamento_mes', {
+      p_mes: Number(mes),
+      p_ano: Number(ano)
+    });
+
+    if (error) throw error;
+
+    res.json({
+      totalAdiantamento: data ?? 0
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: 'Erro ao buscar adiantamento' });
+  }
+});
 
 module.exports = router;
