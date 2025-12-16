@@ -329,7 +329,24 @@ router.get('/adiantamento-mes', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar adiantamento' });
   }
 });
+//====================================================================
+//Saldos por Plataformas
+//====================================================================
+router.get('/saldo-plataformas', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('saldo_por_plataforma');
 
+    if (error) throw error;
+
+    return res.json({ plataformas: data });
+
+  } catch (err) {
+    console.error('Erro RPC saldo_por_plataforma:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar saldo por plataforma.'
+    });
+  }
+});
 
 
 module.exports = router;
