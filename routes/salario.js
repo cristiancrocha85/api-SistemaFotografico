@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
       .from('tb_Salario')
       .select(`
         Id,
-        sal_TiposPgto,
+        sal_TipoPgto,
         sal_Valor,
         sal_Mes,
         sal_Ano,
@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
     // Formata saída
     const response = (data || []).map(salario => ({
       Id: salario.Id,
-      sal_TiposPgto: salario.sal_TiposPgto,
+      sal_TipoPgto: salario.sal_TipoPgto,
       sal_Valor: salario.sal_Valor,
       sal_Mes: salario.sal_Mes,
       sal_Ano: salario.sal_Ano,
