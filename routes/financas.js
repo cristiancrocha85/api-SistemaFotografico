@@ -311,6 +311,33 @@ router.get('/salario-do-mes', async (req, res) => {
   }
 });
 //====================================================================
+//Ajuste
+//====================================================================
+router.get('/_ajuste', async (req, res) => {
+  const { mes, ano } = req.query;
+
+  try {
+    const { data, error } = await supabase
+      .rpc('ajuste', {
+        p_mes: mes,
+        p_ano: ano
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({
+      ajuste: data ?? 0
+    });
+  } catch (err) {
+    console.error('Erro RPC ajuste:', err);
+    res.status(500).json({
+      erro: 'Falha ao buscar o ajuste.'
+    });
+  }
+});
+//====================================================================
 //Adiantamento Mês
 //====================================================================
 router.get('/adiantamento-mes', async (req, res) => {
