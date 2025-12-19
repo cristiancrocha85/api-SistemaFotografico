@@ -362,18 +362,11 @@ router.get('/adiantamento-mes', async (req, res) => {
 router.get('/saldo-plataformas', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('saldo_por_plataforma');
-
     if (error) throw error;
-
-    return res.json({ plataformas: data });
-
+    res.json(data);
   } catch (err) {
-    console.error('Erro RPC saldo_por_plataforma:', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar saldo por plataforma.'
-    });
+    res.status(500).json({ erro: err.message });
   }
 });
-
 
 module.exports = router;
