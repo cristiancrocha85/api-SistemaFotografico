@@ -4,7 +4,7 @@ const router = express.Router();
 const supabase = require('../supabase');
 
 //=============================================
-// Listar Agenda
+// Listar salário
 //=============================================
 router.get('/', async (req, res) => {
   try {
@@ -13,10 +13,10 @@ router.get('/', async (req, res) => {
       .select(`
         Id,
         sal_TipoPgto,
-        sal_Valor,
+        sal_Valor,        
+        sal_Plataforma,
         sal_Mes,
         sal_Ano,
-        tb_Plataforma ( plat_Plataforma )
       `)
       .order('Id', { ascending: false });
 
@@ -30,9 +30,9 @@ router.get('/', async (req, res) => {
       Id: salario.Id,
       sal_TipoPgto: salario.sal_TipoPgto,
       sal_Valor: salario.sal_Valor,
+      sal_Plataforma: salario.sal_Plataforma,
       sal_Mes: salario.sal_Mes,
       sal_Ano: salario.sal_Ano,
-      Plataforma:salario.tb_Plataforma?.plat_Plataforma || null,
     }));
 
     res.json(response);
