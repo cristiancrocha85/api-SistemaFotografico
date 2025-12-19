@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
         sal_Valor,        
         sal_Plataforma,
         sal_Mes,
-        sal_Ano,
+        sal_Ano
       `)
       .order('Id', { ascending: false });
 
@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
       sal_Valor: salario.sal_Valor,
       sal_Plataforma: salario.sal_Plataforma,
       sal_Mes: salario.sal_Mes,
-      sal_Ano: salario.sal_Ano,
+      sal_Ano: salario.sal_Ano
     }));
 
     res.json(response);
