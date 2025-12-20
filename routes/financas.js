@@ -357,13 +357,17 @@ router.get('/adiantamento-mes', async (req, res) => {
   }
 });
 //====================================================================
-//Saldos por Plataformas
+// Saldos por Plataformas de Venda
 //====================================================================
 router.get('/saldo-plataformas', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('saldo_por_plataforma');
+    const { data, error } = await supabase.rpc('saldo_por_plataforma_venda');
+
     if (error) throw error;
-    res.json(data);
+
+    res.json({
+      plataformas: data
+    });
   } catch (err) {
     res.status(500).json({ erro: err.message });
   }
