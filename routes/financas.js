@@ -290,11 +290,7 @@ router.get('/salario-do-mes', async (req, res) => {
   const { mes, ano } = req.query;
 
   try {
-    const { data, error } = await supabase
-      .rpc('salario_mes', {
-        p_mes: mes,
-        p_ano: ano
-      });
+    const { data, error } = await supabase.rpc('salario_mes');
 
     if (error) {
       throw error;
