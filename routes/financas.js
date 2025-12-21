@@ -372,5 +372,22 @@ router.get('/saldo-plataformas', async (req, res) => {
     res.status(500).json({ erro: err.message });
   }
 });
+// =============================================
+// Salários por Mês (Ano Atual)
+// =============================================
+router.get('/salarios-meses-ano', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_salarios_por_mes_ano');
+
+    if (error) throw error;
+
+    return res.json({ meses: data });
+  } catch (err) {
+    console.error('Erro RPC total_salarios_por_mes_ano:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar salários por mês.'
+    });
+  }
+});
 
 module.exports = router;
