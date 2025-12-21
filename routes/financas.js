@@ -370,13 +370,13 @@ router.get('/saldo-plataformas', async (req, res) => {
 // =============================================
 router.get('/salarios-meses-ano', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_salarios_por_mes');
+    const { data, error } = await supabase.rpc('lista_salario_mensal');
 
     if (error) throw error;
 
     return res.json({ meses: data });
   } catch (err) {
-    console.error('Erro RPC total_salarios_por_mes:', err);
+    console.error('Erro RPC lista_salario_mensal:', err);
     return res.status(500).json({
       erro: 'Falha ao buscar salários por mês.'
     });
