@@ -287,14 +287,10 @@ router.get('/previsao-salarial', async (req, res) => {
 //Salario Mês
 //====================================================================
 router.get('/salario-do-mes', async (req, res) => {
-  const { mes, ano } = req.query;
-
   try {
-    const { data, error } = await supabase.rpc('salario_mes');
+    const { data, error } = await supabase.rpc('salario_mes'); // <— sem parâmetros
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     res.json({
       totalSalario: data ?? 0
@@ -306,6 +302,7 @@ router.get('/salario-do-mes', async (req, res) => {
     });
   }
 });
+
 //====================================================================
 //Ajuste
 //====================================================================
