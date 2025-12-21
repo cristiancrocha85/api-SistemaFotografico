@@ -288,7 +288,7 @@ router.get('/previsao-salarial', async (req, res) => {
 //====================================================================
 router.get('/salario-do-mes', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('salario_mes'); // <— sem parâmetros
+    const { data, error } = await supabase.rpc('salario_mensal'); // <— sem parâmetros
 
     if (error) throw error;
 
