@@ -85,38 +85,66 @@ router.post('/', async (req, res) => {
 });
 
 //=============================================
-// Editar Plataformas
+// Editar Salário / Plataforma
 //=============================================
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { plat_Plataforma } = req.body;
+  const {
+    sal_TipoPgto,
+    sal_Valor,
+    sal_Plataforma,
+    sal_Mes,
+    sal_Ano
+  } = req.body;
+
+  // Guard clause – sem payload, sem jogo
+  if (
+    !sal_TipoPgto ||
+    sal_Valor === undefined ||
+    !sal_Plataforma ||
+    !sal_Mes ||
+    !sal_Ano
+  ) {
+    return res.status(400).json({ error: 'Dados obrigatórios não informados' });
+  }
 
   try {
     const { data, error } = await supabase
-      .from('tb_Plataforma')
-      .update({ plat_Plataforma })
+      .from('tb_Salario')
+      .update({
+        sal_TipoPgto,
+        sal_Valor,
+        sal_Plataforma,
+        sal_Mes,
+        sal_Ano
+      })
       .eq('Id', id)
-      .select();
+      .select()
+      .single();
 
     if (error) {
-      if (error.code === '23505' || error.message.includes("duplicate key value")) {
-        return res.status(400).json({ error: "Plataforma já cadastrada" });
-      }
-
-      console.error("Erro ao editar a plataforma:", error.message);
-      return res.status(500).json({ error: 'Erro ao editar a plataforma', details: error.message });
+      console.error('Erro ao editar salário:', error.message);
+      return res.status(500).json({
+        error: 'Erro ao editar salário',
+        details: error.message
+      });
     }
 
-    if (!data || data.length === 0) {
-      return res.status(404).json({ error: 'Plataforma não encontrada' });
+    if (!data) {
+      return res.status(404).json({ error: 'Registro não encontrado' });
     }
 
-    res.status(200).json(data[0]);
+    res.status(200).json(data);
+
   } catch (err) {
-    console.error("Erro inesperado ao editar a plataforma:", err.message);
-    res.status(500).json({ error: 'Erro inesperado ao editar a plataforma', details: err.message });
+    console.error('Erro inesperado:', err.message);
+    res.status(500).json({
+      error: 'Erro inesperado',
+      details: err.message
+    });
   }
 });
+
 //=============================================
 // Excluir Plataforma
 //=============================================
