@@ -153,20 +153,20 @@ router.delete('/:id', async (req, res) => {
 
   try {
     const { error } = await supabase
-      .from('tb_Plataforma')
+      .from('tb_Salario')
       .delete()
       .eq('Id', id);
 
     if (error) {
-      console.error("Erro ao excluir a plataforma:", error.message);
-      return res.status(500).json({ error: 'Erro ao excluir a plataforma', details: error.message });
+      console.error("Erro ao excluir o dado:", error.message);
+      return res.status(500).json({ error: 'Erro ao excluir o dado', details: error.message });
     }
 
     // Retorna só o status e uma mensagem genérica
     return res.status(200).json({ success: true });
   } catch (err) {
-    console.error("Erro inesperado ao excluir a plataforma:", err.message);
-    return res.status(500).json({ error: 'Erro inesperado ao excluir a plataforma', details: err.message });
+    console.error("Erro inesperado ao excluir o dado:", err.message);
+    return res.status(500).json({ error: 'Erro inesperado ao excluir o dado', details: err.message });
   }
 });
 
