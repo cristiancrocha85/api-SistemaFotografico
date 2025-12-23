@@ -8,7 +8,7 @@ const supabase = require('../supabase');
 router.get('/totalmes', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .rpc('total_recebido_mes');
+      .rpc('total_mes');
 
     if (error) throw error;
 
@@ -17,7 +17,7 @@ router.get('/totalmes', async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Erro RPC total_recebido_mes:', err);
+    console.error('Erro RPC total_mes:', err);
     return res.status(500).json({
       erro: 'Falha ao buscar total do mês.'
     });
@@ -28,7 +28,7 @@ router.get('/totalmes', async (req, res) => {
 // =============================================
 router.get('/totalano', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_recebido_ano');
+    const { data, error } = await supabase.rpc('total_ano');
 
     if (error) throw error;
 
