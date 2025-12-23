@@ -48,7 +48,7 @@ router.get('/totalano', async (req, res) => {
 // =============================================
 router.get('/totalmes-plataformas', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_por_plataforma_mes');
+    const { data, error } = await supabase.rpc('total_plataforma_mes');
 
     if (error) throw error;
 
@@ -61,6 +61,7 @@ router.get('/totalmes-plataformas', async (req, res) => {
     });
   }
 });
+//total_por_plataforma_mes
 // =============================================
 // Total Ano Plataforma
 // =============================================
