@@ -46,21 +46,21 @@ router.get('/totalano', async (req, res) => {
 // =============================================
 // Total Mes Plataforma
 // =============================================
-/*router.get('/totalmes-plataformas', async (req, res) => {
+router.get('/totalmes-plataformas', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_plataforma_mes');
+    const { data, error } = await supabase.rpc('total_por_plataforma_mes');
 
     if (error) throw error;
 
     return res.json({ plataformas: data });
 
   } catch (err) {
-    console.error('Erro RPC total_plataforma_mes:', err);
+    console.error('Erro RPC total_por_plataforma_mes:', err);
     return res.status(500).json({
       erro: 'Falha ao buscar total de plataformas no mês.'
     });
   }
-});*/
+});
 //total_por_plataforma_mes
 // =============================================
 // Total Ano Plataforma
