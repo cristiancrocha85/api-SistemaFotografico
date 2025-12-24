@@ -347,10 +347,10 @@ router.get('/total_mes_retrasado', async (req, res) => {
 //===================================================
 // Total Mes Passado
 //===================================================
-router.get('/totalmespassado', async (req, res) => {
+router.get('/total_mes_passado', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .rpc('total_recebido_mes_passado');
+      .rpc('total_mes_passado');
 
     if (error) throw error;
 
@@ -359,7 +359,7 @@ router.get('/totalmespassado', async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Erro RPC total_recebido_mes:_passado', err);
+    console.error('Erro RPC total_mes_passado', err);
     return res.status(500).json({
       erro: 'Falha ao buscar total do mês.'
     });
