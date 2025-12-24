@@ -100,7 +100,7 @@ router.get('/5anos_Anteriores', async (req, res) => {
 // =============================================
 // Contagem Eventos Mes e Ano
 // =============================================
-router.get('/eventos-mes', async (req, res) => {
+router.get('/eventos_mes', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('mes_eventos');
     if (error) throw error;
