@@ -102,7 +102,7 @@ router.get('/5anos_Anteriores', async (req, res) => {
 // =============================================
 router.get('/eventos-mes', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_eventos_mes');
+    const { data, error } = await supabase.rpc('mes_eventos');
     if (error) throw error;
 
     return res.json({ total: data });
