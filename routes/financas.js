@@ -305,7 +305,7 @@ router.get('/salario-do-mes', async (req, res) => {
 //====================================================================
 //Ajuste
 //====================================================================
-router.get('/_ajuste', async (req, res) => {
+router.get('/ajuste', async (req, res) => {
   const { mes, ano } = req.query;
 
   try {
