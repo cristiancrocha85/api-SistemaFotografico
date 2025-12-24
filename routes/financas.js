@@ -324,6 +324,27 @@ router.get('/lista_salario_mensal', async (req, res) => {
   }
 });
 //===================================================
+// Total Mes Retrasado
+//===================================================
+router.get('/total_mes_retrasado', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('total_mes_retrasado');
+
+    if (error) throw error;
+
+    return res.json({
+      totalFaturadoMes: data
+    });
+
+  } catch (err) {
+    console.error('Erro RPC total_mes_retrasado', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total do mês.'
+    });
+  }
+});
+//===================================================
 // Total Mes Passado
 //===================================================
 router.get('/totalmespassado', async (req, res) => {
@@ -344,27 +365,7 @@ router.get('/totalmespassado', async (req, res) => {
     });
   }
 });
-//===================================================
-// Total Mes Retrasado
-//===================================================
-router.get('/totalmesretrasado', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .rpc('total_recebido_mes_retrasado');
 
-    if (error) throw error;
-
-    return res.json({
-      totalFaturadoMes: data
-    });
-
-  } catch (err) {
-    console.error('Erro RPC total_recebido_mes:_passado', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar total do mês.'
-    });
-  }
-});
 //===================================================
 // GET /totais-plataforma-mes/:year/:month
 //===================================================
