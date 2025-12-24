@@ -366,24 +366,4 @@ router.get('/total_mes_passado', async (req, res) => {
   }
 });
 
-//===================================================
-// GET /totais-plataforma-mes/:year/:month
-//===================================================
-router.get('/totais-plataforma-ano', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .rpc('total_por_plataforma_meses');
-
-    if (error) throw error;
-
-    res.json({ totals: data || [] });
-  } catch (err) {
-    console.error('Erro RPC totais-plataforma-ano:', err);
-    res.status(500).json({ erro: 'Falha ao buscar totais por plataforma do ano.' });
-  }
-});
-
-
-
-
 module.exports = router;
