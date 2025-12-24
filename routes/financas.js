@@ -289,6 +289,25 @@ router.get('/ajuste', async (req, res) => {
   }
 });
 //====================================================================
+//Adiantamento Mês
+//====================================================================
+router.get('/adiantamento', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('adiantamento');
+
+    if (error) throw error;
+
+    const total = Array.isArray(data)
+      ? data[0]?.adiantamento_mes ?? 0
+      : data ?? 0;
+
+    res.json({ totalAdiantamento: total });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: 'Erro ao buscar adiantamento' });
+  }
+});
+//====================================================================
 //Salario Mês
 //====================================================================
 router.get('/salario_do_mes', async (req, res) => {
@@ -327,25 +346,6 @@ router.get('/previsao-salarial', async (req, res) => {
   } catch (err) {
     console.error('Erro RPC previsao-salarial (catch):', err);
     res.json({ previsaoSalarial: 0 }); // fallback geral
-  }
-});
-//====================================================================
-//Adiantamento Mês
-//====================================================================
-router.get('/adiantamento-mes', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('adiantamento_mes');
-
-    if (error) throw error;
-
-    const total = Array.isArray(data)
-      ? data[0]?.adiantamento_mes ?? 0
-      : data ?? 0;
-
-    res.json({ totalAdiantamento: total });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: 'Erro ao buscar adiantamento' });
   }
 });
 //====================================================================
