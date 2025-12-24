@@ -67,7 +67,7 @@ router.get('/totalMes_Plataformas', async (req, res) => {
 // =============================================
 router.get('/totalAno-Plataformas', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_Ano_Plataforma');
+    const { data, error } = await supabase.rpc('total_ano_plataforma');
 
     if (error) throw error;
 
