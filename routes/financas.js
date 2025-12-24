@@ -113,13 +113,45 @@ router.get('/eventos_mes', async (req, res) => {
 });
 router.get('/eventos-ano', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_eventos_ano');
+    const { data, error } = await supabase.rpc('ano_eventos');
     if (error) throw error;
 
     return res.json({ total: data });
   } catch (err) {
     console.error('Erro eventos ano:', err);
     return res.status(500).json({ erro: 'Falha ao buscar total de eventos' });
+  }
+});
+//===================================================
+// GET Soma Vendas Qtd Fotos Mês
+//===================================================
+router.get('/qtd_fotos_mes_atual', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('fotos_mes_atual');
+
+    if (error) throw error;
+
+    res.json({ totalFaturadoMes: data ?? 0 });
+  } catch (err) {
+    console.error('Erro RPC qtd_fotos_mes_atual:', err);
+    res.status(500).json({ erro: 'Falha ao buscar total do mês atual.' });
+  }
+});
+//===================================================
+// GET Soma Vendas Qtd Fotos Ano
+//===================================================
+router.get('/qtd_fotos_ano_atual', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('fotos_ano_atual');
+
+    if (error) throw error;
+
+    res.json({ totalAno: data ?? 0 });
+  } catch (err) {
+    console.error('Erro RPC qtd_fotos_ano_atual:', err);
+    res.status(500).json({ erro: 'Falha ao buscar total do ano atual.' });
   }
 });
 // =============================================
@@ -195,38 +227,6 @@ router.get('/totais-plataforma-ano', async (req, res) => {
   } catch (err) {
     console.error('Erro RPC totais-plataforma-ano:', err);
     res.status(500).json({ erro: 'Falha ao buscar totais por plataforma do ano.' });
-  }
-});
-//===================================================
-// GET Soma Vendas Qtd Fotos Mês
-//===================================================
-router.get('/total-fotos-mes-atual', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .rpc('qtd_fotos_mes_atual');
-
-    if (error) throw error;
-
-    res.json({ totalFaturadoMes: data ?? 0 });
-  } catch (err) {
-    console.error('Erro RPC total-fotos-mes-atual:', err);
-    res.status(500).json({ erro: 'Falha ao buscar total do mês atual.' });
-  }
-});
-//===================================================
-// GET Soma Vendas Qtd Fotos Ano
-//===================================================
-router.get('/total-fotos-ano-atual', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .rpc('qtd_fotos_ano_atual');
-
-    if (error) throw error;
-
-    res.json({ totalAno: data ?? 0 });
-  } catch (err) {
-    console.error('Erro RPC total-fotos-ano-atual:', err);
-    res.status(500).json({ erro: 'Falha ao buscar total do ano atual.' });
   }
 });
 //===================================================
