@@ -167,17 +167,15 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao atualizar médias.', detalhe: err.message });
   }
 });
-
 // =============================================
 // Top 3 Meses
 // =============================================
-router.get("/top3-mes/:mes/:ano", async (req, res) => {
+router.get("/top3_mes/:mes/:ano", async (req, res) => {
   try {
     const mes = parseInt(req.params.mes);
     const ano = parseInt(req.params.ano);
 
-    const { data, error } = await supabase
-      .rpc("fn_top3_mes", { m: mes, y: ano });
+    const { data, error } = await supabase.rpc("top3_mes", { m: mes, y: ano });
 
     if (error) throw error;
 
@@ -189,11 +187,11 @@ router.get("/top3-mes/:mes/:ano", async (req, res) => {
 // =============================================
 // Top 3 Ano
 // =============================================
-router.get("/top3-ano/:ano", async (req, res) => {
+router.get("/top3_ano/:ano", async (req, res) => {
   try {
     const ano = parseInt(req.params.ano);
 
-    const { data, error } = await supabase.rpc("fn_top3_ano", { y: ano });
+    const { data, error } = await supabase.rpc("top3_ano", { y: ano });
 
     if (error) throw error;
 
