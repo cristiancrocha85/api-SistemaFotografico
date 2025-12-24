@@ -292,15 +292,15 @@ router.get('/saldo_plataformas', async (req, res) => {
 // =============================================
 // Total Meses
 // =============================================
-router.get('/total-meses-ano', async (req, res) => {
+router.get('/total_meses_ano', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_por_mes_ano');
+    const { data, error } = await supabase.rpc('total_meses_ano');
 
     if (error) throw error;
 
     return res.json({ meses: data });
   } catch (err) {
-    console.error('Erro RPC total_por_mes_ano:', err);
+    console.error('Erro RPC total_meses_ano:', err);
     return res.status(500).json({
       erro: 'Falha ao buscar total de meses.'
     });
