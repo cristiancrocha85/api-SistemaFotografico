@@ -65,16 +65,16 @@ router.get('/totalMes_Plataformas', async (req, res) => {
 // =============================================
 // Total Ano Plataforma
 // =============================================
-router.get('/totalano-plataformas', async (req, res) => {
+router.get('/totalAno-Plataformas', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('total_por_plataforma_ano');
+    const { data, error } = await supabase.rpc('total_Ano_Plataforma');
 
     if (error) throw error;
 
     return res.json({ plataformas: data });
 
   } catch (err) {
-    console.error('Erro RPC total_por_plataforma_ano:', err);
+    console.error('Erro RPC total_Ano_Plataforma:', err);
     return res.status(500).json({
       erro: 'Falha ao buscar total de plataformas no ano.'
     });
