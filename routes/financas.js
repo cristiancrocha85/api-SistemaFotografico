@@ -154,81 +154,6 @@ router.get('/qtd_fotos_ano_atual', async (req, res) => {
     res.status(500).json({ erro: 'Falha ao buscar total do ano atual.' });
   }
 });
-// =============================================
-// Total Meses
-// =============================================
-router.get('/total-meses-ano', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('total_por_mes_ano');
-
-    if (error) throw error;
-
-    return res.json({ meses: data });
-  } catch (err) {
-    console.error('Erro RPC total_por_mes_ano:', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar total de meses.'
-    });
-  }
-});
-//===================================================
-// Total Mes Passado
-//===================================================
-router.get('/totalmespassado', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .rpc('total_recebido_mes_passado');
-
-    if (error) throw error;
-
-    return res.json({
-      totalFaturadoMes: data
-    });
-
-  } catch (err) {
-    console.error('Erro RPC total_recebido_mes:_passado', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar total do mês.'
-    });
-  }
-});
-//===================================================
-// Total Mes Retrasado
-//===================================================
-router.get('/totalmesretrasado', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .rpc('total_recebido_mes_retrasado');
-
-    if (error) throw error;
-
-    return res.json({
-      totalFaturadoMes: data
-    });
-
-  } catch (err) {
-    console.error('Erro RPC total_recebido_mes:_passado', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar total do mês.'
-    });
-  }
-});
-//===================================================
-// GET /totais-plataforma-mes/:year/:month
-//===================================================
-router.get('/totais-plataforma-ano', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .rpc('total_por_plataforma_meses');
-
-    if (error) throw error;
-
-    res.json({ totals: data || [] });
-  } catch (err) {
-    console.error('Erro RPC totais-plataforma-ano:', err);
-    res.status(500).json({ erro: 'Falha ao buscar totais por plataforma do ano.' });
-  }
-});
 //===================================================
 // Saldo Liberado
 //===================================================
@@ -329,12 +254,12 @@ router.get('/salario_do_mes', async (req, res) => {
 //===================================================
 // Previsão Salarial
 //===================================================
-router.get('/previsao-salarial', async (req, res) => {
+router.get('/previsao_salarial', async (req, res) => {
   try {
     const { data, error } = await supabase.rpc('previsao_salarial');
 
     if (error) {
-      console.error('Erro RPC previsao-salarial:', error);
+      console.error('Erro RPC previsao_salarial:', error);
       return res.json({ previsaoSalarial: 0 }); // fallback
     }
 
@@ -348,6 +273,82 @@ router.get('/previsao-salarial', async (req, res) => {
     res.json({ previsaoSalarial: 0 }); // fallback geral
   }
 });
+// =============================================
+// Total Meses
+// =============================================
+router.get('/total-meses-ano', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('total_por_mes_ano');
+
+    if (error) throw error;
+
+    return res.json({ meses: data });
+  } catch (err) {
+    console.error('Erro RPC total_por_mes_ano:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total de meses.'
+    });
+  }
+});
+//===================================================
+// Total Mes Passado
+//===================================================
+router.get('/totalmespassado', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('total_recebido_mes_passado');
+
+    if (error) throw error;
+
+    return res.json({
+      totalFaturadoMes: data
+    });
+
+  } catch (err) {
+    console.error('Erro RPC total_recebido_mes:_passado', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total do mês.'
+    });
+  }
+});
+//===================================================
+// Total Mes Retrasado
+//===================================================
+router.get('/totalmesretrasado', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('total_recebido_mes_retrasado');
+
+    if (error) throw error;
+
+    return res.json({
+      totalFaturadoMes: data
+    });
+
+  } catch (err) {
+    console.error('Erro RPC total_recebido_mes:_passado', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar total do mês.'
+    });
+  }
+});
+//===================================================
+// GET /totais-plataforma-mes/:year/:month
+//===================================================
+router.get('/totais-plataforma-ano', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('total_por_plataforma_meses');
+
+    if (error) throw error;
+
+    res.json({ totals: data || [] });
+  } catch (err) {
+    console.error('Erro RPC totais-plataforma-ano:', err);
+    res.status(500).json({ erro: 'Falha ao buscar totais por plataforma do ano.' });
+  }
+});
+
 //====================================================================
 // Saldos por Plataformas de Venda
 //====================================================================
