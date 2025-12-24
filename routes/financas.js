@@ -261,47 +261,6 @@ router.get('/saldo_bloqueado', async (req, res) => {
     res.status(500).json({ erro: 'Falha ao buscar saldo bloqueado.' });
   }
 });
-//===================================================
-// Previsão Salarial
-//===================================================
-router.get('/previsao-salarial', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('previsao_salarial');
-
-    if (error) {
-      console.error('Erro RPC previsao-salarial:', error);
-      return res.json({ previsaoSalarial: 0 }); // fallback
-    }
-
-    // Se vier null (porque não tem vendas), padroniza
-    const valor = data ?? 0;
-
-    res.json({ previsaoSalarial: valor });
-
-  } catch (err) {
-    console.error('Erro RPC previsao-salarial (catch):', err);
-    res.json({ previsaoSalarial: 0 }); // fallback geral
-  }
-});
-//====================================================================
-//Salario Mês
-//====================================================================
-router.get('/salario-do-mes', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('salario_mensal'); // <— sem parâmetros
-
-    if (error) throw error;
-
-    res.json({
-      totalSalario: data ?? 0
-    });
-  } catch (err) {
-    console.error('Erro RPC salario-mes:', err);
-    res.status(500).json({
-      erro: 'Falha ao buscar total de salário.'
-    });
-  }
-});
 //====================================================================
 //Ajuste
 //====================================================================
@@ -327,6 +286,47 @@ router.get('/ajuste', async (req, res) => {
     res.status(500).json({
       erro: 'Falha ao buscar o ajuste.'
     });
+  }
+});
+//====================================================================
+//Salario Mês
+//====================================================================
+router.get('/salario_do_mes', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('salario_mensal');
+
+    if (error) throw error;
+
+    res.json({
+      totalSalario: data ?? 0
+    });
+  } catch (err) {
+    console.error('Erro RPC salario-mes:', err);
+    res.status(500).json({
+      erro: 'Falha ao buscar total de salário.'
+    });
+  }
+});
+//===================================================
+// Previsão Salarial
+//===================================================
+router.get('/previsao-salarial', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('previsao_salarial');
+
+    if (error) {
+      console.error('Erro RPC previsao-salarial:', error);
+      return res.json({ previsaoSalarial: 0 }); // fallback
+    }
+
+    // Se vier null (porque não tem vendas), padroniza
+    const valor = data ?? 0;
+
+    res.json({ previsaoSalarial: valor });
+
+  } catch (err) {
+    console.error('Erro RPC previsao-salarial (catch):', err);
+    res.json({ previsaoSalarial: 0 }); // fallback geral
   }
 });
 //====================================================================
