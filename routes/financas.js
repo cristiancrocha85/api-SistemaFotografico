@@ -306,6 +306,23 @@ router.get('/total_meses_ano', async (req, res) => {
     });
   }
 });
+// =============================================
+// Salários por Mês (Ano Atual)
+// =============================================
+router.get('/lista_salario_mensal', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('lista_salario_mensal');
+
+    if (error) throw error;
+
+    return res.json({ meses: data });
+  } catch (err) {
+    console.error('Erro RPC lista_salario_mensal:', err);
+    return res.status(500).json({
+      erro: 'Falha ao buscar salários por mês.'
+    });
+  }
+});
 //===================================================
 // Total Mes Passado
 //===================================================
@@ -366,22 +383,6 @@ router.get('/totais-plataforma-ano', async (req, res) => {
 });
 
 
-// =============================================
-// Salários por Mês (Ano Atual)
-// =============================================
-router.get('/salarios-meses-ano', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('lista_salario_mensal');
 
-    if (error) throw error;
-
-    return res.json({ meses: data });
-  } catch (err) {
-    console.error('Erro RPC lista_salario_mensal:', err);
-    return res.status(500).json({
-      erro: 'Falha ao buscar salários por mês.'
-    });
-  }
-});
 
 module.exports = router;
