@@ -85,14 +85,14 @@ router.get('/totalAno-Plataformas', async (req, res) => {
 // =============================================
 router.get('/5anos_Anteriores', async (req, res) => {
   try {
-    const { data, error } = await supabase.rpc('anteriores_5Anos');
+    const { data, error } = await supabase.rpc('anteriores_5anos');
 
     if (error) throw error;
 
     return res.json({ anos: data });
 
   } catch (err) {
-    console.error('Erro RPC anteriores_5Anos:', err);
+    console.error('Erro RPC anteriores_5anos:', err);
     return res.status(500).json({
       erro: 'Falha ao buscar total dos 5 anos anteriores.'
     });
