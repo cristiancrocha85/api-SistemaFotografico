@@ -269,8 +269,24 @@ router.get('/previsao_salarial', async (req, res) => {
     res.json({ previsaoSalarial: valor });
 
   } catch (err) {
-    console.error('Erro RPC previsao-salarial (catch):', err);
+    console.error('Erro RPC previsao_salarial (catch):', err);
     res.json({ previsaoSalarial: 0 }); // fallback geral
+  }
+});
+//====================================================================
+// Saldos por Plataformas de Venda
+//====================================================================
+router.get('/saldo_plataformas', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('saldo_plataformas');
+
+    if (error) throw error;
+
+    res.json({
+      plataformas: data
+    });
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
   }
 });
 // =============================================
@@ -349,22 +365,7 @@ router.get('/totais-plataforma-ano', async (req, res) => {
   }
 });
 
-//====================================================================
-// Saldos por Plataformas de Venda
-//====================================================================
-router.get('/saldo-plataformas', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('saldo_por_plataforma_venda');
 
-    if (error) throw error;
-
-    res.json({
-      plataformas: data
-    });
-  } catch (err) {
-    res.status(500).json({ erro: err.message });
-  }
-});
 // =============================================
 // Salários por Mês (Ano Atual)
 // =============================================
