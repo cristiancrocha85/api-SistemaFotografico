@@ -233,6 +233,25 @@ router.get('/adiantamento', async (req, res) => {
   }
 });
 //====================================================================
+//Adiantamento Próximo Mês
+//====================================================================
+router.get('/adiantamento_proximo_mes', async (req, res) => {
+  try {
+    const { data, error } = await supabase.rpc('adiantamento_proximo_mes');
+
+    if (error) throw error;
+
+    const total = Array.isArray(data)
+      ? data[0] ?? 0
+      : data ?? 0;
+
+    res.json({ totalAdiantamentoProximoMes: total });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: 'Erro ao buscar adiantamento do próximo mês' });
+  }
+});
+//====================================================================
 //Salario Mês
 //====================================================================
 router.get('/salario_do_mes', async (req, res) => {
