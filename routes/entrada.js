@@ -81,11 +81,25 @@ router.post('/', async (req, res) => {
     } = req.body;
 
     const formatarData = (valor) => {
+    if (!valor) return null;
+
+    const data = new Date(valor);
+    if (isNaN(data)) return null;
+
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const dia = String(data.getDate()).padStart(2, '0');
+
+    return `${ano}-${mes}-${dia}`;
+    };
+
+
+    /*const formatarData = (valor) => {
       if (!valor) return null;
       const data = new Date(valor);
       if (isNaN(data)) return null;
       return data.toISOString().split('T')[0];
-    };
+    };*/
 
     const novaEntrada = {
       ent_DataEntrada: formatarData(ent_DataEntrada) || formatarData(new Date()),
