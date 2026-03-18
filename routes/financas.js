@@ -385,4 +385,22 @@ router.get('/total_mes_passado', async (req, res) => {
   }
 });
 
+//==========================TESTE========================================
+//===================================================
+// Ajuste Bloqueado
+//===================================================
+router.get('/ajuste_bloqueado', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('ajuste_bloqueado');
+
+    if (error) throw error;
+
+    res.json({ saldoBloqueado: data ?? 0 });
+  } catch (err) {
+    console.error('Erro RPC ajuste_bloqueado:', err);
+    res.status(500).json({ erro: 'Falha ao buscar o ajuste bloqueado.' });
+  }
+});
+
 module.exports = router;
