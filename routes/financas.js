@@ -402,5 +402,21 @@ router.get('/ajuste_bloqueado', async (req, res) => {
     res.status(500).json({ erro: 'Falha ao buscar o ajuste bloqueado.' });
   }
 });
+//==========================================================================
+//===================================================
+// Ajuste Bloqueado
+//===================================================
+router.get('/liberar_saldo_bloqueado', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('liberar_saldo_bloqueado');
 
+    if (error) throw error;
+
+    res.json({ saldoBloqueado: data ?? 0 });
+  } catch (err) {
+    console.error('Erro RPC liberar_saldo_bloqueado:', err);
+    res.status(500).json({ erro: 'Falha ao buscar o ajuste bloqueado.' });
+  }
+});
 module.exports = router;
