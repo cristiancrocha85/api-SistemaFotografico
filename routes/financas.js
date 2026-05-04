@@ -413,7 +413,7 @@ router.get('/liberar_saldo_bloqueado', async (req, res) => {
 
     if (error) throw error;
 
-    res.json({ saldoBloqueado: data ?? 0 });
+    //res.json({ saldoBloqueado: data ?? 0 });
   } catch (err) {
     console.error('Erro RPC liberar_saldo_bloqueado:', err);
     res.status(500).json({ erro: 'Falha ao buscar o ajuste _ bloqueado.' });
