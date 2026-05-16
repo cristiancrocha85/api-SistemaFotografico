@@ -20,8 +20,6 @@ router.get('/', async (req, res) => {
         ent_ValorTotal,
         ent_TipoPgto,
         ent_Status,
-        ent_LiberarSaldo,
-        ent_DataPrevista,
         ent_Mes,
         ent_Ano,
         ent_Evento,
