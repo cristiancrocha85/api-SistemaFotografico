@@ -70,8 +70,6 @@ router.post('/', async (req, res) => {
       ent_ValorTotal,
       ent_TipoPgto,
       ent_Status,
-      ent_LiberarSaldo,
-      ent_DataPrevista,
       ent_Mes,
       ent_Ano
     } = req.body;
@@ -107,8 +105,6 @@ router.post('/', async (req, res) => {
       ent_ValorTotal: ent_ValorTotal ? Number(String(ent_ValorTotal).replace(',', '.')) : 0,
       ent_TipoPgto,
       ent_Status,
-      ent_LiberarSaldo,
-      ent_DataPrevista: formatarData(ent_DataPrevista),
       ent_Mes,
       ent_Ano
     };
