@@ -394,7 +394,7 @@ router.get('/liberar_saldo_bloqueado', async (req, res) => {
     res.json({ liberarSaldoBloqueado: data ?? 0 });
   } catch (err) {
     console.error('Erro RPC liberar_saldo_bloqueado:', err);
-    res.status(500).json({ erro: 'Falha ao buscar o ajuste _ bloqueado.' });
+    res.status(500).json({ erro: 'Falha ao buscar a função liberar ajuste bloqueado.' });
   }
 });
 module.exports = router;
