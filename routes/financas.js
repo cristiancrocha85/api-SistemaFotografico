@@ -270,28 +270,6 @@ router.get('/salario_do_mes', async (req, res) => {
     });
   }
 });
-//===================================================
-// Previsão Salarial
-//===================================================
-router.get('/previsao_salarial', async (req, res) => {
-  try {
-    const { data, error } = await supabase.rpc('previsao_salarial');
-
-    if (error) {
-      console.error('Erro RPC previsao_salarial:', error);
-      return res.json({ previsaoSalarial: 0 }); // fallback
-    }
-
-    // Se vier null (porque não tem vendas), padroniza
-    const valor = data ?? 0;
-
-    res.json({ previsaoSalarial: valor });
-
-  } catch (err) {
-    console.error('Erro RPC previsao_salarial (catch):', err);
-    res.json({ previsaoSalarial: 0 }); // fallback geral
-  }
-});
 //====================================================================
 // Saldos por Plataformas de Venda
 //====================================================================
